@@ -29,8 +29,8 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Ensures the grid is always 4x4 */
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
             margin: 20px 0;
         }
 
@@ -38,15 +38,15 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            margin-bottom: 10px;
         }
 
         .correct-group {
-            grid-column: span 4; /* Ensures the correct group takes the width of 4 columns */
-            background-color: #B0C4DE;
-            border-radius: 5px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
             margin-bottom: 10px;
-            padding: 10px;
-            text-align: center;
+            width: 100%;
         }
 
         .grid-item {
@@ -57,10 +57,7 @@
             cursor: pointer;
             user-select: none;
             transition: background-color 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
+            font-size: calc(10px + 1vw);
         }
 
         .grid-item.selected {
@@ -86,9 +83,9 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #87A96B;
+            background-color: #729B8C;
             color: white;
-            margin: 5px;
+            margin-top: 10px;
             transition: background-color 0.3s;
         }
 
@@ -97,8 +94,8 @@
         }
 
         @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr); /* Ensures the grid stays 4x4 on mobile */
+            .grid, .correct-group {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -112,12 +109,20 @@
             margin: 5px 0;
             font-size: 14px;
             color: green;
+            grid-column: span 4;
+            text-align: center;
         }
 
-        .attempts {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #000;
+        .success-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .game-over-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
         }
     </style>
 </head>
@@ -126,7 +131,7 @@
         <h1>Dört tane dörtlü grup oluştur!</h1>
         <div class="correct-groups-container">
             <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
-                <div>{{ group.items.join(", ") }}</div>
+                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
                 <p>{{ group.message }}</p>
             </div>
         </div>
@@ -135,12 +140,13 @@
                 {{ item }}
             </div>
         </div>
+        <div class="message" v-if="wrongGuessMessage">{{ wrongGuessMessage }}</div>
+        <div class="success-message" v-if="successMessage">{{ successMessage }}</div>
+        <div class="game-over-message" v-if="attemptsLeft === 0">{{ successMessage }}</div>
+        <div>Kalan deneme: {{ attemptsLeft }}</div>
         <button @click="deselectAll">Temizle</button>
         <button @click="checkResults">Gönder</button>
         <button @click="shuffleItems">Karıştır</button>
-        <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
-        <div v-if="successMessage" :class="{'message': true, 'success': successMessage.includes('Tebrikler!')}">{{ successMessage }}</div>
-        <div class="attempts">Kalan deneme: {{ attemptsLeft }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
