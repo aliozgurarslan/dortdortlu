@@ -1,18 +1,18 @@
 new Vue({
     el: '#app',
     data: {
-        items: ["ERGENEKON", "ÜLKER", "KURT", "UMAY", "KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM", "REVAK", "CÜLUS", "HAREM", "KUBBE", "SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"],
+        items: ["DİVAN", "SERBEST", "HİKAYE", "DESTAN", "KARAKUTU", "KÖRÜK", "TIRNAK", "TIRPAN", "YUNUS EMRE", "NECİP FAZIL", "CEMİL MERİÇ", "RÜŞTÜ HİLMİ", "DAĞ", "OVA", "GÖL", "IRMAK"],
         correctGroups: [
-            ["ERGENEKON", "ÜLKER", "KURT", "UMAY"],
-            ["KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM"],
-            ["REVAK", "CÜLUS", "HAREM", "KUBBE"],
-            ["SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"]
+            ["DİVAN", "SERBEST", "HİKAYE", "DESTAN"],
+            ["KARAKUTU", "KÖRÜK", "TIRNAK", "TIRPAN"],
+            ["YUNUS EMRE", "NECİP FAZIL", "CEMİL MERİÇ", "RÜŞTÜ HİLMİ"],
+            ["DAĞ", "OVA", "GÖL", "IRMAK"]
         ],
         correctGroupMessages: [
-            "ERGENEKON, ÜLKER, KURT, UMAY - Bu grup Türk mitolojisi varlıklarıdır.",
-            "KAZASKER, SADRAZAM, DİVAN, ŞEYHÜLİSLAM - Bu grup Osmanlıca hukuk terimleridir.",
-            "REVAK, CÜLUS, HAREM, KUBBE - Bu grup Osmanlı mimari terimleridir.",
-            "SEHER, ZÜLFİKAR, FERDA, ŞEBNEM - Bu grup Türk şiirinde sık kullanılan kelimelerdir."
+            "DİVAN, SERBEST, HİKAYE, DESTAN - Bu grup Türk edebiyatı terimleridir.",
+            "KARAKUTU, KÖRÜK, TIRNAK, TIRPAN - Bu grup Türk deyimleridir.",
+            "YUNUS EMRE, NECİP FAZIL, CEMİL MERİÇ, RÜŞTÜ HİLMİ - Bu grup Türk filozofları ve şairleridir.",
+            "DAĞ, OVA, GÖL, IRMAK - Bu grup Türk coğrafi özellikleridir."
         ],
         correctItems: [],
         selectedItems: [],
@@ -86,6 +86,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
+                    this.revealAllGroups();
                 }
             }
 
@@ -100,6 +101,11 @@ new Vue({
         },
         shuffleItems() {
             this.items = this.items.sort(() => Math.random() - 0.5);
+        },
+        revealAllGroups() {
+            this.correctGroups.forEach(group => {
+                this.correctItems.push(...group);
+            });
         }
     }
 });
