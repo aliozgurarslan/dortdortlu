@@ -1,18 +1,18 @@
 new Vue({
     el: '#app',
     data: {
-        items: ["DİVAN", "SERBEST", "HİKAYE", "DESTAN", "KARAKUTU", "KÖRÜK", "TIRNAK", "TIRPAN", "YUNUS EMRE", "NECİP FAZIL", "CEMİL MERİÇ", "RÜŞTÜ HİLMİ", "DAĞ", "OVA", "GÖL", "IRMAK"],
+        items: ["ERGENEKON", "ÜLKER", "KURT", "UMAY", "KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM", "REVAK", "CÜLUS", "HAREM", "KUBBE", "SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"],
         correctGroups: [
-            ["DİVAN", "SERBEST", "HİKAYE", "DESTAN"],
-            ["KARAKUTU", "KÖRÜK", "TIRNAK", "TIRPAN"],
-            ["YUNUS EMRE", "NECİP FAZIL", "CEMİL MERİÇ", "RÜŞTÜ HİLMİ"],
-            ["DAĞ", "OVA", "GÖL", "IRMAK"]
+            ["ERGENEKON", "ÜLKER", "KURT", "UMAY"],
+            ["KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM"],
+            ["REVAK", "CÜLUS", "HAREM", "KUBBE"],
+            ["SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"]
         ],
         correctGroupMessages: [
-            "DİVAN, SERBEST, HİKAYE, DESTAN - Bu grup Türk edebiyatı terimleridir.",
-            "KARAKUTU, KÖRÜK, TIRNAK, TIRPAN - Bu grup Türk deyimleridir.",
-            "YUNUS EMRE, NECİP FAZIL, CEMİL MERİÇ, RÜŞTÜ HİLMİ - Bu grup Türk filozofları ve şairleridir.",
-            "DAĞ, OVA, GÖL, IRMAK - Bu grup Türk coğrafi özellikleridir."
+            "ERGENEKON, ÜLKER, KURT, UMAY - Bu grup Türk mitolojisi varlıklarıdır.",
+            "KAZASKER, SADRAZAM, DİVAN, ŞEYHÜLİSLAM - Bu grup Osmanlıca hukuk terimleridir.",
+            "REVAK, CÜLUS, HAREM, KUBBE - Bu grup Osmanlı mimari terimleridir.",
+            "SEHER, ZÜLFİKAR, FERDA, ŞEBNEM - Bu grup Türk şiirinde sık kullanılan kelimelerdir."
         ],
         correctItems: [],
         selectedItems: [],
