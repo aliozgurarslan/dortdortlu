@@ -111,7 +111,8 @@ new Vue({
             this.selectedItems = [];
         },
         revealAllGroups() {
-            for (let i = 0; i < this.correctGroups.length; i++) {
+            for (let i = 0; i < this.correctGroups.length
+                             for (let i = 0; i < this.correctGroups.length; i++) {
                 let groupItems = this.correctGroups[i];
                 if (!groupItems.every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...groupItems);
