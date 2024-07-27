@@ -91,7 +91,6 @@ new Vue({
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
                     this.successMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
-                    this.wrongGuessMessage = "";
                 }
             }
 
@@ -103,16 +102,14 @@ new Vue({
                 if (a[i] !== b[i]) return false;
             }
             return true;
-        },
-        shuffleItems() {
+               shuffleItems() {
             this.items = this.items.sort(() => Math.random() - 0.5);
         },
         deselectAll() {
             this.selectedItems = [];
         },
         revealAllGroups() {
-            for (let i = 0; i < this.correctGroups.length
-                             for (let i = 0; i < this.correctGroups.length; i++) {
+            for (let i = 0; i < this.correctGroups.length; i++) {
                 let groupItems = this.correctGroups[i];
                 if (!groupItems.every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...groupItems);
