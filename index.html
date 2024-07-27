@@ -30,59 +30,40 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px; /* Adjust the gap between the boxes */
+            gap: 5px; 
             margin: 20px 0;
         }
 
         .correct-groups-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .correct-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            background-color: #B0C4DE;
-            border-radius: 5px;
-            text-align: center;
-            grid-column: span 4;
-            margin-bottom: 10px; /* Added bottom margin */
-        }
-
-        .correct-group div {
-            width: 100%;
-            margin-bottom: 5px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
         .grid-item {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #87A96B; /* Same green as the submit button */
+            padding: 15px;
+            background-color: #87A96B;
             color: white;
             border-radius: 5px;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.3s, transform 0.5s;
-            position: relative;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
             text-align: center;
-            padding: 5px;
-            box-sizing: border-box;
-            word-wrap: break-word;
-            font-size: 1vw; /* Dynamic font size */
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
         }
 
         .grid-item.selected {
-            background-color: #333333; /* Dark gray for selected boxes */
+            background-color: #556B2F;
         }
 
         .grid-item.correct {
@@ -114,6 +95,12 @@
             background-color: #556B2F;
         }
 
+        @media (max-width: 600px) {
+            .grid, .correct-group {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         .message {
             margin-top: 10px;
             font-size: 14px;
@@ -121,36 +108,11 @@
         }
 
         .correct-group p {
-            margin: 5px 0 0;
+            margin: 5px 0;
             font-size: 14px;
-            color: black;
-            line-height: 1.2; /* Ensure the text doesn't wrap to a third line */
-        }
-
-        .move-enter-active, .move-leave-active {
-            transition: all 0.5s ease;
-        }
-        .move-enter, .move-leave-to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .grid-item.move {
-            transition: transform 0.5s ease;
-        }
-
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 5px; /* Reduce the gap between the boxes for smaller screens */
-            }
-            .correct-group {
-                grid-template-columns: repeat(1, 1fr);
-            }
-            .grid-item {
-                width: 80px;
-                height: 80px;
-                font-size: 10px; /* Adjust font size for smaller screens */
-            }
+            color: green;
+            grid-column: span 4;
+            text-align: center;
         }
     </style>
 </head>
@@ -159,146 +121,22 @@
         <h1>Dört tane dörtlü grup oluştur!</h1>
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div class="correct-groups-container">
-            <transition-group name="move" tag="div">
-                <div v-for="(group, index) in correctGroupsWithMessages" :key="group.items" class="correct-group">
-                    <div>{{ group.items }}</div>
-                    <p>{{ group.message }}</p>
-                </div>
-            </transition-group>
+            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
+                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
+                <p>{{ group.message }}</p>
+            </div>
         </div>
-        <transition-group name="move" tag="div" class="grid">
-            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item), 'move': correctItems.includes(item)}">
+        <div id="puzzle-grid" class="grid">
+            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
                 {{ item }}
             </div>
-        </transition-group>
+        </div>
         <button @click="checkResults">Gönder</button>
         <button @click="shuffleItems">Karıştır</button>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                items: ["ERGENEKON", "ÜLKER", "KURT", "UMAY", "KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM", "REVAK", "CÜLUS", "HAREM", "KUBBE", "SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"],
-                correctGroups: [
-                    ["ERGENEKON", "ÜLKER", "KURT", "UMAY"],
-                    ["KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM"],
-                    ["REVAK", "CÜLUS", "HAREM", "KUBBE"],
-                    ["SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"]
-                ],
-                correctGroupMessages: [
-                    "Türk mitolojisi terimleri.",
-                    "Osmanlıca hukuk terimleri.",
-                    "Osmanlı mimari terimleri.",
-                    "Türk şiirinde sık kullanılan kelimeler."
-                ],
-                correctItems: [],
-                selectedItems: [],
-                previousGuesses: [],
-                attemptsLeft: 5,
-                wrongGuessMessage: "",
-                isWrong: false,
-                wrongGuessItems: [],
-                gameEnded: false
-            },
-            created() {
-                this.shuffleItems();
-            },
-            computed: {
-                remainingItems() {
-                    return this.items.filter(item => !this.correctItems.includes(item));
-                },
-                correctGroupsWithMessages() {
-                    let groupsWithMessages = [];
-                    for (let i = 0; i < this.correctGroups.length; i++) {
-                        let groupItems = this.correctGroups[i];
-                        if (groupItems.every(item => this.correctItems.includes(item))) {
-                            groupsWithMessages.push({
-                                items: groupItems.join(', '),
-                                message: this.correctGroupMessages[i]
-                            });
-                        }
-                    }
-                    return groupsWithMessages;
-                }
-            },
-            methods: {
-                toggleSelection(item) {
-                    if (this.gameEnded) {
-                        return;
-                    }
-                    if (this.selectedItems.includes(item)) {
-                        this.selectedItems = this.selectedItems.filter(i => i !== item);
-                    } else {
-                        if (this.selectedItems.length < 4) {
-                            this.selectedItems.push(item);
-                        }
-                    }
-                },
-                checkResults() {
-                    if (this.selectedItems.length !== 4) {
-                        this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
-                        return;
-                    }
-
-                    let currentGuess = [...this.selectedItems].sort().toString();
-                    if (this.previousGuesses.includes(currentGuess)) {
-                        this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
-                        this.selectedItems = [];
-                        return;
-                    }
-
-                    this.previousGuesses.push(currentGuess);
-
-                    let isCorrect = this.correctGroups.some(group => {
-                        return this.arraysEqual(group.sort(), this.selectedItems.sort());
-                    });
-
-                    if (isCorrect) {
-                        this.correctItems.push(...this.selectedItems);
-                        this.wrongGuessMessage = "";
-                    } else {
-                        this.wrongGuessItems = [...this.selectedItems];
-                        this.wrongGuessMessage = "Yanlış tahmin!";
-                        this.isWrong = true;
-                                                setTimeout(() => {
-                            this.isWrong = false;
-                            this.wrongGuessItems = [];
-                        }, 3000);
-                        this.attemptsLeft--;
-                        if (this.attemptsLeft <= 0) {
-                            this.attemptsLeft = 0;
-                            this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
-                            this.revealAllGroups();
-                            this.gameEnded = true;
-                        }
-                    }
-
-                    this.selectedItems = [];
-                },
-                arraysEqual(a, b) {
-                    if (a.length !== b.length) return false;
-                    for (let i = 0; i < a.length; i++) {
-                        if (a[i] !== b[i]) return false;
-                    }
-                    return true;
-                },
-                shuffleItems() {
-                    this.items = this.items.sort(() => Math.random() - 0.5);
-                },
-                revealAllGroups() {
-                    this.correctGroups.forEach(group => {
-                        group.forEach(item => {
-                            if (!this.correctItems.includes(item)) {
-                                this.correctItems.push(item);
-                            }
-                        });
-                    });
-                }
-            }
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
