@@ -111,13 +111,12 @@ new Vue({
             this.selectedItems = [];
         },
         revealAllGroups() {
-            this.correctGroups.forEach(group => {
-                group.forEach(item => {
-                    if (!this.correctItems.includes(item)) {
-                        this.correctItems.push(item);
-                    }
-                });
-            });
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
+                if (!groupItems.every(item => this.correctItems.includes(item))) {
+                    this.correctItems.push(...groupItems);
+                }
+            }
         }
     }
 });
