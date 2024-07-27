@@ -37,7 +37,7 @@
         .correct-groups-container {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 5px;
+            gap: 10px;
             margin-bottom: 10px;
         }
 
@@ -50,10 +50,12 @@
             border-radius: 5px;
             text-align: center;
             grid-column: span 4;
+            margin-bottom: 10px;
         }
 
         .correct-group div {
             width: 100%;
+            margin-bottom: 5px;
         }
 
         .grid-item {
@@ -111,6 +113,7 @@
             margin: 5px 0 0;
             font-size: 14px;
             color: black;
+            line-height: 1.2; /* Ensure the text doesn't wrap to a third line */
         }
 
         .move-enter-active, .move-leave-active {
@@ -261,11 +264,12 @@
                         }
                     }
 
-                    this.selectedItems = [];
+                    this.selectedItems
+                                        this.selectedItems = [];
                 },
                 arraysEqual(a, b) {
                     if (a.length !== b.length) return false;
-                                       for (let i = 0; i < a.length; i++) {
+                    for (let i = 0; i < a.length; i++) {
                         if (a[i] !== b[i]) return false;
                     }
                     return true;
