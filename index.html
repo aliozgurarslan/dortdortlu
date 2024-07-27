@@ -41,11 +41,23 @@
         }
 
         .correct-group {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 5px; /* Reduce gap to make boxes narrower */
             margin-bottom: 10px;
             width: 100%;
+            background-color: #B0C4DE;
+            padding: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .correct-group p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: green;
+            text-align: center;
         }
 
         .grid-item {
@@ -53,6 +65,7 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            height: 60px; /* Fixed height for consistency */
             padding: 15px; /* Reduce padding to make boxes narrower */
             background-color: #87A96B;
             color: white;
@@ -107,14 +120,6 @@
             font-size: 14px;
             color: red;
         }
-
-        .correct-group p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: green;
-            grid-column: span 4;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -123,7 +128,7 @@
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div class="correct-groups-container">
             <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
-                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
+                <div>{{ group.items.join(', ') }}</div>
                 <p>{{ group.message }}</p>
             </div>
         </div>
