@@ -22,6 +22,7 @@ new Vue({
         correctItems: [],
         selectedItems: [],
         previousGuesses: [],
+        correctGuessesOrder: [],
         attemptsLeft: 5,
         wrongGuessMessage: "",
         isWrong: false,
@@ -36,14 +37,12 @@ new Vue({
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
-            for (let i = 0; i < this.correctGroups.length; i++) {
-                let groupItems = this.correctGroups[i];
-                if (groupItems.every(item => this.correctItems.includes(item))) {
-                    groupsWithMessages.push({
-                        items: groupItems,
-                        message: this.correctGroupMessages[i]
-                    });
-                }
+            for (let i = 0; i < this.correctGuessesOrder.length; i++) {
+                let groupIndex = this.correctGuessesOrder[i];
+                groupsWithMessages.push({
+                    items: this.correctGroups[groupIndex],
+                    message: this.correctGroupMessages[groupIndex]
+                });
             }
             return groupsWithMessages;
         }
@@ -73,9 +72,14 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let isCorrect = this.correctGroups.some(group => {
-                return this.arraysEqual(group.sort(), this.selectedItems.sort());
-            });
+            let isCorrect = false;
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                if (this.arraysEqual(this.correctGroups[i].sort(), this.selectedItems.sort())) {
+                    isCorrect = true;
+                    this.correctGuessesOrder.push(i);
+                    break;
+                }
+            }
 
             if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
@@ -111,6 +115,7 @@ new Vue({
             for (let i = 0; i < this.correctGroups.length; i++) {
                 if (!this.correctGroups[i].every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...this.correctGroups[i]);
+                    this.correctGuessesOrder.push(i);
                 }
             }
         }
