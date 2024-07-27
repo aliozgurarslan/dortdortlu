@@ -91,6 +91,7 @@ new Vue({
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
                     this.successMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
+                    this.wrongGuessMessage = "";
                 }
             }
 
@@ -110,12 +111,13 @@ new Vue({
             this.selectedItems = [];
         },
         revealAllGroups() {
-            for (let i = 0; i < this.correctGroups.length; i++) {
-                let groupItems = this.correctGroups[i];
-                if (!groupItems.every(item => this.correctItems.includes(item))) {
-                    this.correctItems.push(...groupItems);
-                }
-            }
+            this.correctGroups.forEach(group => {
+                group.forEach(item => {
+                    if (!this.correctItems.includes(item)) {
+                        this.correctItems.push(item);
+                    }
+                });
+            });
         }
     }
 });
