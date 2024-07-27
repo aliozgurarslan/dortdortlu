@@ -56,6 +56,7 @@
             user-select: none;
             transition: background-color 0.3s, transform 0.5s;
             position: relative;
+            transition: transform 0.5s ease;
         }
 
         .grid-item.selected {
@@ -132,7 +133,7 @@
             </div>
         </div>
         <div id="puzzle-grid" class="grid">
-            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item), 'move-to-top': gameEnded}">
+            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
                 {{ item }}
             </div>
         </div>
@@ -181,90 +182,89 @@
                         let groupItems = this.correctGroups[i];
                         if (groupItems.every(item => this.correctItems.includes(item))) {
                             groupsWithMessages.push({
-                                items:
-                                                                       groupItems,
-                                   message: this.correctGroupMessages[i]
-                               });
-                           }
-                       }
-                       return groupsWithMessages;
-                   }
-               },
-               methods: {
-                   toggleSelection(item) {
-                       if (this.gameEnded) {
-                           return;
-                       }
-                       if (this.selectedItems.includes(item)) {
-                           this.selectedItems = this.selectedItems.filter(i => i !== item);
-                       } else {
-                           if (this.selectedItems.length < 4) {
-                               this.selectedItems.push(item);
-                           }
-                       }
-                   },
-                   checkResults() {
-                       if (this.selectedItems.length !== 4) {
-                           this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
-                           return;
-                       }
+                                items: groupItems,
+                                message: this.correctGroupMessages[i]
+                            });
+                        }
+                    }
+                    return groupsWithMessages;
+                }
+            },
+            methods: {
+                toggleSelection(item) {
+                    if (this.gameEnded) {
+                        return;
+                    }
+                    if (this.selectedItems.includes(item)) {
+                        this.selectedItems = this.selectedItems.filter(i => i !== item);
+                    } else {
+                        if (this.selectedItems.length < 4) {
+                            this.selectedItems.push(item);
+                        }
+                    }
+                },
+                checkResults() {
+                    if (this.selectedItems.length !== 4) {
+                        this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
+                        return;
+                    }
 
-                       let currentGuess = [...this.selectedItems].sort().toString();
-                       if (this.previousGuesses.includes(currentGuess)) {
-                           this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
-                           this.selectedItems = [];
-                           return;
-                       }
+                    let currentGuess = [...this.selectedItems].sort().toString();
+                    if (this.previousGuesses.includes(currentGuess)) {
+                        this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
+                        this.selectedItems = [];
+                        return;
+                    }
 
-                       this.previousGuesses.push(currentGuess);
+                    this.previousGuesses.push(currentGuess);
 
-                       let isCorrect = this.correctGroups.some(group => {
-                           return this.arraysEqual(group.sort(), this.selectedItems.sort());
-                       });
+                    let isCorrect = this.correctGroups.some(group => {
+                        return this.arraysEqual(group.sort(), this.selectedItems.sort());
+                    });
 
-                       if (isCorrect) {
-                           this.correctItems.push(...this.selectedItems);
-                           this.wrongGuessMessage = "";
-                       } else {
-                           this.wrongGuessItems = [...this.selectedItems];
-                           this.wrongGuessMessage = "Yanlış tahmin!";
-                           this.isWrong = true;
-                           setTimeout(() => {
-                               this.isWrong = false;
-                               this.wrongGuessItems = [];
-                           }, 3000);
-                           this.attemptsLeft--;
-                           if (this.attemptsLeft <= 0) {
-                               this.attemptsLeft = 0;
-                               this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
-                               this.revealAllGroups();
-                               this.gameEnded = true;
-                           }
-                       }
+                    if (isCorrect) {
+                        this.correctItems.push(...this.selectedItems);
+                        this.wrongGuessMessage = "";
+                    } else {
+                        this.wrongGuessItems = [...this.selectedItems];
+                        this.wrongGuessMessage = "Yanlış tahmin!";
+                        this.isWrong = true;
+                        setTimeout(() => {
+                            this.isWrong = false;
+                            this.wrongGuessItems = [];
+                        }, 3000);
+                        this.attemptsLeft--;
+                        if (this.attemptsLeft <= 0) {
+                            this.attemptsLeft = 0;
+                            this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
+                            this.revealAllGroups();
+                            this.gameEnded = true;
+                        }
+                    }
 
-                       this.selectedItems = [];
-                   },
-                   arraysEqual(a, b) {
-                       if (a.length !== b.length) return false;
-                       for (let i = 0; i < a.length; i++) {
-                           if (a[i] !== b[i]) return false;
-                       }
-                       return true;
-                   },
-                   shuffleItems() {
-                       this.items = this.items.sort(() => Math.random() - 0.5);
-                   },
-                   revealAllGroups() {
-                       this.correctGroups.forEach(group => {
-                           group.forEach(item => {
-                               if (!this.correctItems.includes(item)) {
-                                   this.correctItems.push(item);
-                               }
-                           });
-                       });
-                   }
-               }
-           });
-       </script>
-   </body>
-   </html>
+                    this.selectedItems = [];
+                },
+                arraysEqual(a, b) {
+                    if (a.length !== b.length) return false;
+                    for (let i = 0; i < a.length; i++) {
+                        if (a[i] !== b[i]) return false;
+                    }
+                    return true;
+                },
+                shuffleItems() {
+                    this.items = this.items.sort(() => Math.random() - 0.5);
+                },                revealAllGroups() {
+                    this.correctGroups.forEach(group => {
+                        group.forEach(item => {
+                            if (!this.correctItems.includes(item)) {
+                                this.correctItems.push(item);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+                
