@@ -101,5 +101,20 @@ new Vue({
             for (let i = 0; i < a.length; i++) {
                 if (a[i] !== b[i]) return false;
             }
-            return true;
+            return true;         shuffleItems() {
+            this.items = this.items.sort(() => Math.random() - 0.5);
+        },
+        deselectAll() {
+            this.selectedItems = [];
+        },
+        revealAllGroups() {
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
+                if (!groupItems.every(item => this.correctItems.includes(item))) {
+                    this.correctItems.push(...groupItems);
+                }
+            }
+        }
+    }
+});
        
