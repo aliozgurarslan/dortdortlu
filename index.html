@@ -30,7 +30,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
+            gap: 2px; /* Reduce the gap between the boxes */
             margin: 20px 0;
         }
 
@@ -134,7 +134,7 @@
         @media (max-width: 600px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 2px;
+                gap: 1px; /* Reduce the gap between the boxes for smaller screens */
             }
             .correct-group {
                 grid-template-columns: repeat(1, 1fr);
@@ -262,8 +262,9 @@
                         }, 3000);
                         this.attemptsLeft--;
                         if (this.attemptsLeft <= 0) {
-                            this.attemptsLeft = 0;
-                            this.wrongGuessMessage = '                            Tüm denemeler bitti. Oyun bitti!';
+                            this.attempt
+                                                        this.attemptsLeft = 0;
+                            this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
                             this.revealAllGroups();
                             this.gameEnded = true;
                         }
