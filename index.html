@@ -30,55 +30,40 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 5px; /* Reduce gap to make boxes narrower */
+            gap: 10px;
             margin: 20px 0;
         }
 
         .correct-groups-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .correct-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px; /* Reduce gap to make boxes narrower */
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin-bottom: 10px;
-            width: 100%;
-            background-color: #B0C4DE;
-            padding: 10px;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .correct-group p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: green;
-            text-align: center;
         }
 
         .grid-item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 60px; /* Fixed height for consistency */
-            padding: 15px; /* Reduce padding to make boxes narrower */
-            background-color: #87A96B;
+            padding: 15px;
+            background-color: #729B8C;
             color: white;
             border-radius: 5px;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.3s, font-size 0.3s;
-            box-sizing: border-box;
-            font-size: calc(10px + 1vw); /* Responsive font size */
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(1em + 0.5vw);
         }
 
         .grid-item.selected {
-            background-color: #2c514c;
+            background-color: #2C514C;
         }
 
         .grid-item.correct {
@@ -91,7 +76,7 @@
 
         @keyframes flash-red {
             0% { background-color: #621b00; }
-            100% { background-color: #87A96B; }
+            100% { background-color: #729B8C; }
         }
 
         button {
@@ -102,7 +87,7 @@
             border-radius: 5px;
             background-color: #87A96B;
             color: white;
-            margin: 10px 5px;
+            margin-top: 10px;
             transition: background-color 0.3s;
         }
 
@@ -112,7 +97,7 @@
 
         @media (max-width: 600px) {
             .grid, .correct-group {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -123,34 +108,46 @@
         }
 
         .success-message {
-            margin-top: 10px;
             font-size: 16px;
+            font-weight: bold;
             color: green;
+        }
+
+        .game-over-message {
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .correct-group p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: green;
+            grid-column: span 4;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="app" class="container">
-        <h1 style="font-size: 24px;">Dört tane dörtlü grup oluştur!</h1>
-        <p>Kalan deneme: {{ attemptsLeft }}</p>
-        <div class="correct-groups-container">
-            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
-                <div>{{ group.items.join(', ') }}</div>
-                <p>{{ group.message }}</p>
-            </div>
-        </div>
+        <h1>Dört tane dörtlü grup oluştur!</h1>
         <div id="puzzle-grid" class="grid">
             <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
                 {{ item }}
             </div>
         </div>
-        <div style="display: flex; justify-content: center;">
-            <button @click="deselectAll">Temizle</button>
-            <button @click="checkResults">Gönder</button>
-            <button @click="shuffleItems">Karıştır</button>
+        <p>Kalan deneme: {{ attemptsLeft }}</p>
+        <div class="correct-groups-container">
+            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
+                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
+                <p>{{ group.message }}</p>
+            </div>
         </div>
-        <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
-        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+        <button @click="deselectAll">Temizle</button>
+        <button @click="checkResults">Gönder</button>
+        <button @click="shuffleItems">Karıştır</button>
+        <div v-if="wrongGuessMessage && attemptsLeft > 0" class="message">{{ wrongGuessMessage }}</div>
+        <div v-if="successMessage" :class="successMessage === 'Tebrikler! Bütün grupları bildiniz!' ? 'success-message' : 'game-over-message'">{{ successMessage }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
