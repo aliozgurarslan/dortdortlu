@@ -1,18 +1,23 @@
 new Vue({
     el: '#app',
     data: {
-        items: ["ERGENEKON", "ÜLKER", "KURT", "UMAY", "KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM", "REVAK", "CÜLUS", "HAREM", "KUBBE", "SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"],
+        items: [
+            "KARA", "HASAN", "GALİP", "ENİŞTE",
+            "BAŞ", "ALT", "ÜST", "ARA",
+            "GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR",
+            "KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"
+        ],
         correctGroups: [
-            ["ERGENEKON", "ÜLKER", "KURT", "UMAY"],
-            ["KAZASKER", "SADRAZAM", "DİVAN", "ŞEYHÜLİSLAM"],
-            ["REVAK", "CÜLUS", "HAREM", "KUBBE"],
-            ["SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"]
+            ["KARA", "HASAN", "GALİP", "ENİŞTE"],
+            ["BAŞ", "ALT", "ÜST", "ARA"],
+            ["GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR"],
+            ["KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"]
         ],
         correctGroupMessages: [
-            "ERGENEKON, ÜLKER, KURT, UMAY - Bu grup Türk mitolojisi varlıklarıdır.",
-            "KAZASKER, SADRAZAM, DİVAN, ŞEYHÜLİSLAM - Bu grup Osmanlıca hukuk terimleridir.",
-            "REVAK, CÜLUS, HAREM, KUBBE - Bu grup Osmanlı mimari terimleridir.",
-            "SEHER, ZÜLFİKAR, FERDA, ŞEBNEM - Bu grup Türk şiirinde sık kullanılan kelimelerdir."
+            "Orhan Pamuk romanlarındaki katiller.",
+            "Türkçe önekler.",
+            "Boğaziçi Üniversitesi yerleşke isimleri.",
+            "Filistin direnişinin sembolleri."
         ],
         correctItems: [],
         selectedItems: [],
@@ -20,8 +25,7 @@ new Vue({
         attemptsLeft: 5,
         wrongGuessMessage: "",
         isWrong: false,
-        wrongGuessItems: [],
-        gameEnded: false
+        wrongGuessItems: []
     },
     created() {
         this.shuffleItems();
@@ -46,9 +50,6 @@ new Vue({
     },
     methods: {
         toggleSelection(item) {
-            if (this.gameEnded) {
-                return;
-            }
             if (this.selectedItems.includes(item)) {
                 this.selectedItems = this.selectedItems.filter(i => i !== item);
             } else {
@@ -88,11 +89,9 @@ new Vue({
                     this.wrongGuessItems = [];
                 }, 3000);
                 this.attemptsLeft--;
-                if (this.attemptsLeft <= 0) {
-                    this.attemptsLeft = 0;
-                    this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
+                if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameEnded = true;
+                    this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
                 }
             }
 
@@ -109,13 +108,11 @@ new Vue({
             this.items = this.items.sort(() => Math.random() - 0.5);
         },
         revealAllGroups() {
-            this.correctGroups.forEach(group => {
-                group.forEach(item => {
-                    if (!this.correctItems.includes(item)) {
-                        this.correctItems.push(item);
-                    }
-                });
-            });
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                if (!this.correctGroups[i].every(item => this.correctItems.includes(item))) {
+                    this.correctItems.push(...this.correctGroups[i]);
+                }
+            }
         }
     }
 });
