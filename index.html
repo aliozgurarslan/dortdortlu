@@ -71,11 +71,14 @@
             user-select: none;
             transition: background-color 0.3s, transform 0.5s;
             position: relative;
-            font-size: 14px; /* Adjust font size to fit the words */
             text-align: center;
             padding: 5px;
             box-sizing: border-box;
             word-wrap: break-word;
+            font-size: 1vw; /* Dynamic font size */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .grid-item.selected {
@@ -146,7 +149,7 @@
             .grid-item {
                 width: 80px;
                 height: 80px;
-                font-size: 12px;
+                font-size: 10px; /* Adjust font size for smaller screens */
             }
         }
     </style>
@@ -260,7 +263,7 @@
                         this.wrongGuessItems = [...this.selectedItems];
                         this.wrongGuessMessage = "Yanlış tahmin!";
                         this.isWrong = true;
-                        setTimeout(() => {
+                                                setTimeout(() => {
                             this.isWrong = false;
                             this.wrongGuessItems = [];
                         }, 3000);
