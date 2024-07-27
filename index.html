@@ -41,12 +41,11 @@
         }
 
         .correct-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 5px; /* Reduce gap to make boxes narrower */
             margin-bottom: 10px;
-            flex-wrap: wrap;
+            width: 100%;
         }
 
         .grid-item {
@@ -61,6 +60,7 @@
             cursor: pointer;
             user-select: none;
             transition: background-color 0.3s, font-size 0.3s;
+            box-sizing: border-box;
         }
 
         .grid-item.selected {
@@ -88,7 +88,7 @@
             border-radius: 5px;
             background-color: #87A96B;
             color: white;
-            margin-top: 10px;
+            margin: 10px 5px;
             transition: background-color 0.3s;
         }
 
@@ -98,7 +98,7 @@
 
         @media (max-width: 600px) {
             .grid, .correct-group {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -112,6 +112,7 @@
             margin: 5px 0;
             font-size: 14px;
             color: green;
+            grid-column: span 4;
             text-align: center;
         }
     </style>
@@ -131,9 +132,11 @@
                 {{ item }}
             </div>
         </div>
-        <button @click="deselectAll">Temizle</button>
-        <button @click="checkResults">Gönder</button>
-        <button @click="shuffleItems">Karıştır</button>
+        <div style="display: flex; justify-content: center;">
+            <button @click="deselectAll">Temizle</button>
+            <button @click="checkResults">Gönder</button>
+            <button @click="shuffleItems">Karıştır</button>
+        </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
     </div>
 
