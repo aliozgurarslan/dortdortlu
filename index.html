@@ -54,7 +54,8 @@
             border-radius: 5px;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.5s;
+            position: relative;
         }
 
         .grid-item.selected {
@@ -72,6 +73,15 @@
         @keyframes flash-red {
             0% { background-color: #621b00; }
             100% { background-color: #2c514c; }
+        }
+
+        .move-to-top {
+            animation: moveToTop 1s forwards;
+        }
+
+        @keyframes moveToTop {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
         }
 
         button {
@@ -122,7 +132,7 @@
             </div>
         </div>
         <div id="puzzle-grid" class="grid">
-            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
+            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item), 'move-to-top': gameEnded}">
                 {{ item }}
             </div>
         </div>
