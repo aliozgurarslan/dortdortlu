@@ -67,7 +67,7 @@
             width: 100%;
             height: 60px; /* Fixed height for consistency */
             padding: 15px; /* Reduce padding to make boxes narrower */
-            background-color: 729B8C;
+            background-color: #87A96B;
             color: white;
             border-radius: 5px;
             cursor: pointer;
@@ -91,7 +91,7 @@
 
         @keyframes flash-red {
             0% { background-color: #621b00; }
-            100% { background-color: 729B8C; }
+            100% { background-color: #87A96B; }
         }
 
         button {
@@ -100,7 +100,7 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: 729B8C;
+            background-color: #87A96B;
             color: white;
             margin: 10px 5px;
             transition: background-color 0.3s;
@@ -120,6 +120,12 @@
             margin-top: 10px;
             font-size: 14px;
             color: red;
+        }
+
+        .success-message {
+            margin-top: 10px;
+            font-size: 16px;
+            color: green;
         }
     </style>
 </head>
@@ -144,6 +150,7 @@
             <button @click="shuffleItems">Karıştır</button>
         </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
+        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
