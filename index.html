@@ -59,8 +59,8 @@
         }
 
         .grid-item {
-            width: 100px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,7 +71,7 @@
             user-select: none;
             transition: background-color 0.3s, transform 0.5s;
             position: relative;
-            font-size: 14px;
+            font-size: 12px; /* Adjust font size to fit the words */
         }
 
         .grid-item.selected {
@@ -140,9 +140,9 @@
                 grid-template-columns: repeat(1, 1fr);
             }
             .grid-item {
-                width: 80px;
-                height: 40px;
-                font-size: 12px;
+                width: 60px;
+                height: 60px;
+                font-size: 10px;
             }
         }
     </style>
@@ -263,8 +263,7 @@
                         this.attemptsLeft--;
                         if (this.attemptsLeft <= 0) {
                             this.attemptsLeft = 0;
-                            this.wrongGuessMessage = '
-                                                            Tüm denemeler bitti. Oyun bitti!';
+                            this.wrongGuessMessage = '                            Tüm denemeler bitti. Oyun bitti!';
                             this.revealAllGroups();
                             this.gameEnded = true;
                         }
