@@ -112,12 +112,4 @@ new Vue({
             this.items = this.items.sort(() => Math.random() - 0.5);
         },
         revealAllGroups() {
-            for (let i = 0; i < this.correctGroups.length; i++) {
-                if (!this.correctGroups[i].every(item => this.correctItems.includes(item))) {
-                    this.correctItems.push(...this.correctGroups[i]);
-                    this.correctGuessesOrder.push(i);
-                }
-            }
-        }
-    }
-});
+            for (let i = 
