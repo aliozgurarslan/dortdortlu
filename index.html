@@ -56,7 +56,6 @@
             user-select: none;
             transition: background-color 0.3s, transform 0.5s;
             position: relative;
-            transition: transform 0.5s ease;
         }
 
         .grid-item.selected {
@@ -113,11 +112,14 @@
         }
         
         .move-enter-active, .move-leave-active {
-            transition: all 1s ease;
+            transition: all 0.5s ease;
         }
         .move-enter, .move-leave-to {
-            transform: translateY(30px);
-            opacity: 0;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .grid-item.move {
+            transition: transform 0.5s ease;
         }
     </style>
 </head>
@@ -127,14 +129,14 @@
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div class="correct-groups-container">
             <transition-group name="move" tag="div" class="correct-group">
-                <div v-for="(group, index) in correctGroupsWithMessages" :key="group" class="correct-group">
+                <div v-for="(group, index) in correctGroupsWithMessages" :key="group.items[0]" class="correct-group">
                     <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
                     <p>{{ group.message }}</p>
                 </div>
             </transition-group>
         </div>
         <transition-group name="move" tag="div" class="grid">
-            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
+            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item), 'move': correctItems.includes(item)}">
                 {{ item }}
             </div>
         </transition-group>
@@ -247,7 +249,7 @@
                 },
                 arraysEqual(a, b) {
                     if (a.length !== b.length) return false;
-                    for (let i = 0; i < a.length; i++) {
+                                        for (let i = 0; i < a.length; i++) {
                         if (a[i] !== b[i]) return false;
                     }
                     return true;
