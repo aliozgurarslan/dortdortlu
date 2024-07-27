@@ -30,7 +30,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 2px; /* Reduce the gap between the boxes */
+            gap: 10px; /* Adjust the gap between the boxes */
             margin: 20px 0;
         }
 
@@ -38,7 +38,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .correct-group {
@@ -50,7 +50,6 @@
             border-radius: 5px;
             text-align: center;
             grid-column: span 4;
-            margin-bottom: 10px;
         }
 
         .correct-group div {
@@ -59,8 +58,8 @@
         }
 
         .grid-item {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,7 +70,7 @@
             user-select: none;
             transition: background-color 0.3s, transform 0.5s;
             position: relative;
-            font-size: 12px; /* Adjust font size to fit the words */
+            font-size: 14px; /* Adjust font size to fit the words */
         }
 
         .grid-item.selected {
@@ -134,15 +133,15 @@
         @media (max-width: 600px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 1px; /* Reduce the gap between the boxes for smaller screens */
+                gap: 5px; /* Reduce the gap between the boxes for smaller screens */
             }
             .correct-group {
                 grid-template-columns: repeat(1, 1fr);
             }
             .grid-item {
-                width: 60px;
-                height: 60px;
-                font-size: 10px;
+                width: 80px;
+                height: 80px;
+                font-size: 12px;
             }
         }
     </style>
@@ -182,10 +181,10 @@
                     ["SEHER", "ZÜLFİKAR", "FERDA", "ŞEBNEM"]
                 ],
                 correctGroupMessages: [
-                    "Bu grup Türk mitolojisi varlıklarıdır.",
-                    "Bu grup Osmanlıca hukuk terimleridir.",
-                    "Bu grup Osmanlı mimari terimleridir.",
-                    "Bu grup Türk şiirinde sık kullanılan kelimelerdir."
+                    "Türk mitolojisi terimleri.",
+                    "Osmanlıca hukuk terimleri.",
+                    "Osmanlı mimari terimleri.",
+                    "Türk şiirinde sık kullanılan kelimeler."
                 ],
                 correctItems: [],
                 selectedItems: [],
@@ -262,8 +261,7 @@
                         }, 3000);
                         this.attemptsLeft--;
                         if (this.attemptsLeft <= 0) {
-                            this.attempt
-                                                        this.attemptsLeft = 0;
+                            this.attemptsLeft = 0;
                             this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
                             this.revealAllGroups();
                             this.gameEnded = true;
