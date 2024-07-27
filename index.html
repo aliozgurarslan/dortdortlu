@@ -98,6 +98,10 @@
         @media (max-width: 600px) {
             .grid, .correct-groups-container {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 2px;
+            }
+            .grid-item {
+                padding: 10px;
             }
         }
 
@@ -250,8 +254,8 @@
                     this.selectedItems = [];
                 },
                 arraysEqual(a, b) {
-                    if (a.length !==
-                                            b.length) return false;
+                    if
+                                            (a.length !== b.length) return false;
                     for (let i = 0; i < a.length; i++) {
                         if (a[i] !== b[i]) return false;
                     }
