@@ -35,16 +35,20 @@
         }
 
         .correct-groups-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .correct-group {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
             margin-bottom: 10px;
+        }
+
+        .correct-group {
+            grid-column: span 4;
+            padding: 15px;
+            background-color: #B0C4DE;
+            border-radius: 5px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
         }
 
         .grid-item {
@@ -92,8 +96,8 @@
         }
 
         @media (max-width: 600px) {
-            .grid, .correct-group {
-                grid-template-columns: repeat(2, 1fr);
+            .grid, .correct-groups-container {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -104,13 +108,11 @@
         }
 
         .correct-group p {
-            margin: 5px 0;
+            margin: 5px 0 0;
             font-size: 14px;
-            color: green;
-            grid-column: span 4;
-            text-align: center;
+            color: black;
         }
-        
+
         .move-enter-active, .move-leave-active {
             transition: all 0.5s ease;
         }
@@ -128,9 +130,9 @@
         <h1>Dört tane dörtlü grup oluştur!</h1>
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div class="correct-groups-container">
-            <transition-group name="move" tag="div" class="correct-group">
+            <transition-group name="move" tag="div">
                 <div v-for="(group, index) in correctGroupsWithMessages" :key="group.items[0]" class="correct-group">
-                    <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
+                    <div>{{ group.items.join(', ') }}</div>
                     <p>{{ group.message }}</p>
                 </div>
             </transition-group>
@@ -248,8 +250,9 @@
                     this.selectedItems = [];
                 },
                 arraysEqual(a, b) {
-                    if (a.length !== b.length) return false;
-                                        for (let i = 0; i < a.length; i++) {
+                    if (a.length !==
+                                            b.length) return false;
+                    for (let i = 0; i < a.length; i++) {
                         if (a[i] !== b[i]) return false;
                     }
                     return true;
