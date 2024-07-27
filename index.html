@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dört tane dörtlü grup oluştur!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px; /* Reduce gap to make boxes narrower */
+            margin: 20px 0;
+        }
+
+        .correct-groups-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .correct-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px; /* Reduce gap to make boxes narrower */
+            margin-bottom: 10px;
+        }
+
+        .grid-item {
+            padding: 15px; /* Reduce padding to make boxes narrower */
+            background-color: #87A96B;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .grid-item.selected {
+            background-color: #556B2F;
+        }
+
+        .grid-item.correct {
+            background-color: #B0C4DE;
+        }
+
+        .grid-item.wrong {
+            animation: flash-red 3s;
+        }
+
+        @keyframes flash-red {
+            0% { background-color: #FF6F6F; }
+            100% { background-color: #87A96B; }
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #87A96B;
+            color: white;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #556B2F;
+        }
+
+        @media (max-width: 600px) {
+            .grid, .correct-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+        }
+
+        .correct-group p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: green;
+            grid-column: span 4;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Dört tane dörtlü grup oluştur!</h1>
+        <p>Kalan deneme: {{ attemptsLeft }}</p>
+        <div class="correct-groups-container">
+            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
+                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
+                <p>{{ group.message }}</p>
+            </div>
+        </div>
+        <div id="puzzle-grid" class="grid">
+            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
+                {{ item }}
+            </div>
+        </div>
+        <button @click="checkResults">Gönder</button>
+        <button @click="shuffleItems">Karıştır</button>
+        <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
