@@ -90,4 +90,32 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft <= 0) {
                     this.attemptsLeft = 0;
-                   
+                    this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
+                    this.revealAllGroups();
+                    this.gameEnded = true;
+                }
+            }
+
+            this.selectedItems = [];
+        },
+        arraysEqual(a, b) {
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) return false;
+            }
+            return true;
+        },
+        shuffleItems() {
+            this.items = this.items.sort(() => Math.random() - 0.5);
+        },
+        revealAllGroups() {
+            this.correctGroups.forEach(group => {
+                group.forEach(item => {
+                    if (!this.correctItems.includes(item)) {
+                        this.correctItems.push(item);
+                    }
+                });
+            });
+        }
+    }
+});
