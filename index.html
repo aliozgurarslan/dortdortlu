@@ -57,7 +57,7 @@
         }
 
         .grid-item {
-            padding: 10px;
+            padding: 20px 10px; /* Increase height by increasing padding */
             background-color: #2c514c;
             color: white;
             border-radius: 5px;
@@ -133,7 +133,7 @@
                 grid-template-columns: repeat(1, 1fr);
             }
             .grid-item {
-                padding: 5px;
+                padding: 10px 5px; /* Increase height by increasing padding */
                 font-size: 12px;
             }
         }
@@ -145,8 +145,8 @@
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div class="correct-groups-container">
             <transition-group name="move" tag="div">
-                <div v-for="(group, index) in correctGroupsWithMessages" :key="group.items[0]" class="correct-group">
-                    <div>{{ group.items.join(', ') }}</div>
+                <div v-for="(group, index) in correctGroupsWithMessages" :key="group.items" class="correct-group">
+                    <div>{{ group.items }}</div>
                     <p>{{ group.message }}</p>
                 </div>
             </transition-group>
@@ -265,9 +265,8 @@
                 },
                 arraysEqual(a, b) {
                     if (a.length !== b.length) return false;
-                    for (let i = 0; i < a.length; i++) {
-                        if
-                                                    (a[i] !== b[i]) return false;
+                                       for (let i = 0; i < a.length; i++) {
+                        if (a[i] !== b[i]) return false;
                     }
                     return true;
                 },
