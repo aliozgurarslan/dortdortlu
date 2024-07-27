@@ -1,12 +1,7 @@
 new Vue({
     el: '#app',
     data: {
-        items: [
-            "KARA", "HASAN", "GALİP", "ENİŞTE",
-            "BAŞ", "ALT", "ÜST", "ARA",
-            "GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR",
-            "KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"
-        ],
+        items: ["KARA", "HASAN", "GALİP", "ENİŞTE", "BAŞ", "ALT", "ÜST", "ARA", "GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR", "KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"],
         correctGroups: [
             ["KARA", "HASAN", "GALİP", "ENİŞTE"],
             ["BAŞ", "ALT", "ÜST", "ARA"],
@@ -15,7 +10,7 @@ new Vue({
         ],
         correctGroupMessages: [
             "Orhan Pamuk romanlarındaki katiller.",
-            "Türkçe önekler.",
+            "Türkçe örnekler.",
             "Boğaziçi Üniversitesi yerleşke isimleri.",
             "Filistin direnişinin sembolleri."
         ],
@@ -90,8 +85,7 @@ new Vue({
                 }, 3000);
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
-                    this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
-                    this.revealAnswers();
+                    this.revealAllGroups();
                 }
             }
 
@@ -110,8 +104,13 @@ new Vue({
         deselectAll() {
             this.selectedItems = [];
         },
-        revealAnswers() {
-            this.correctItems = [...this.items];
+        revealAllGroups() {
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
+                if (!groupItems.every(item => this.correctItems.includes(item))) {
+                    this.correctItems.push(...groupItems);
+                }
+            }
         }
     }
 });
