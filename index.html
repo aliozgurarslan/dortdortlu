@@ -120,22 +120,4 @@
             text-align: center;
         }
     </style>
-</head>
-<body>
-    <div id="app" class="container">
-        <h1>Dört tane dörtlü grup oluştur!</h1>
-        <p>Kalan deneme: {{ attemptsLeft }}</p>
-        <div class="correct-groups-container">
-            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
-                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
-                <p>{{ group.message }}</p>
-            </div>
-        </div>
-        <div id="puzzle-grid" class="grid">
-            <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item), 'move-to-top': gameEnded}">
-                {{ item }}
-            </div>
-        </div>
-        <button @click="checkResults">Gönder</button>
-        <button @click="shuffleItems">Karıştır</button>
-        <div v
+​⬤
