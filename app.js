@@ -21,7 +21,8 @@ new Vue({
         wrongGuessMessage: "",
         successMessage: "",
         isWrong: false,
-        wrongGuessItems: []
+        wrongGuessItems: [],
+        guessedGroups: []
     },
     created() {
         this.shuffleItems();
@@ -32,12 +33,13 @@ new Vue({
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
-            for (let i = 0; i < this.correctGroups.length; i++) {
-                let groupItems = this.correctGroups[i];
+            for (let i = 0; i < this.guessedGroups.length; i++) {
+                let groupIndex = this.guessedGroups[i];
+                let groupItems = this.correctGroups[groupIndex];
                 if (groupItems.every(item => this.correctItems.includes(item))) {
                     groupsWithMessages.push({
                         items: groupItems,
-                        message: this.correctGroupMessages[i]
+                        message: this.correctGroupMessages[groupIndex]
                     });
                 }
             }
@@ -69,12 +71,13 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let isCorrect = this.correctGroups.some(group => {
+            let groupIndex = this.correctGroups.findIndex(group => {
                 return this.arraysEqual(group.sort(), this.selectedItems.sort());
             });
 
-            if (isCorrect) {
+            if (groupIndex !== -1) {
                 this.correctItems.push(...this.selectedItems);
+                this.guessedGroups.push(groupIndex);
                 this.wrongGuessMessage = "";
                 if (this.correctItems.length === this.items.length) {
                     this.successMessage = "Tebrikler! Bütün grupları bildiniz!";
