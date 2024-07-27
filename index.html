@@ -29,23 +29,24 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* Ensures the grid is always 4x4 */
             gap: 10px;
             margin: 20px 0;
         }
 
         .correct-groups-container {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .correct-group {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-column: span 4; /* Ensures the correct group takes the width of 4 columns */
+            background-color: #B0C4DE;
+            border-radius: 5px;
             margin-bottom: 10px;
+            padding: 10px;
+            text-align: center;
         }
 
         .grid-item {
@@ -57,13 +58,13 @@
             user-select: none;
             transition: background-color 0.3s;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: calc(1em + 0.5vw);
+            align-items: center;
+            font-size: 1.2rem;
         }
 
         .grid-item.selected {
-            background-color: #2C514C;
+            background-color: #556B2F;
         }
 
         .grid-item.correct {
@@ -75,7 +76,7 @@
         }
 
         @keyframes flash-red {
-            0% { background-color: #621b00; }
+            0% { background-color: #FF6F6F; }
             100% { background-color: #729B8C; }
         }
 
@@ -87,7 +88,7 @@
             border-radius: 5px;
             background-color: #87A96B;
             color: white;
-            margin-top: 10px;
+            margin: 5px;
             transition: background-color 0.3s;
         }
 
@@ -96,8 +97,8 @@
         }
 
         @media (max-width: 600px) {
-            .grid, .correct-group {
-                grid-template-columns: repeat(2, 1fr);
+            .grid {
+                grid-template-columns: repeat(4, 1fr); /* Ensures the grid stays 4x4 on mobile */
             }
         }
 
@@ -107,47 +108,39 @@
             color: red;
         }
 
-        .success-message {
-            font-size: 16px;
-            font-weight: bold;
-            color: green;
-        }
-
-        .game-over-message {
-            font-size: 16px;
-            font-weight: bold;
-            color: red;
-        }
-
         .correct-group p {
             margin: 5px 0;
             font-size: 14px;
             color: green;
-            grid-column: span 4;
-            text-align: center;
+        }
+
+        .attempts {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #000;
         }
     </style>
 </head>
 <body>
     <div id="app" class="container">
         <h1>Dört tane dörtlü grup oluştur!</h1>
+        <div class="correct-groups-container">
+            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
+                <div>{{ group.items.join(", ") }}</div>
+                <p>{{ group.message }}</p>
+            </div>
+        </div>
         <div id="puzzle-grid" class="grid">
             <div v-for="item in remainingItems" :key="item" @click="toggleSelection(item)" :class="{'grid-item': true, 'selected': selectedItems.includes(item), 'wrong': wrongGuessItems.includes(item)}">
                 {{ item }}
             </div>
         </div>
-        <p>Kalan deneme: {{ attemptsLeft }}</p>
-        <div class="correct-groups-container">
-            <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
-                <div class="grid-item correct" v-for="item in group.items" :key="item">{{ item }}</div>
-                <p>{{ group.message }}</p>
-            </div>
-        </div>
         <button @click="deselectAll">Temizle</button>
         <button @click="checkResults">Gönder</button>
         <button @click="shuffleItems">Karıştır</button>
-        <div v-if="wrongGuessMessage && attemptsLeft > 0" class="message">{{ wrongGuessMessage }}</div>
-        <div v-if="successMessage" :class="successMessage === 'Tebrikler! Bütün grupları bildiniz!' ? 'success-message' : 'game-over-message'">{{ successMessage }}</div>
+        <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
+        <div v-if="successMessage" :class="{'message': true, 'success': successMessage.includes('Tebrikler!')}">{{ successMessage }}</div>
+        <div class="attempts">Kalan deneme: {{ attemptsLeft }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
