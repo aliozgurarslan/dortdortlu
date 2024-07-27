@@ -10,7 +10,7 @@ new Vue({
         ],
         correctGroupMessages: [
             "Orhan Pamuk romanlarındaki katiller.",
-            "Türkçe örnekler.",
+            "Türkçe ön ekler.",
             "Boğaziçi Üniversitesi yerleşke isimleri.",
             "Filistin direnişinin sembolleri."
         ],
