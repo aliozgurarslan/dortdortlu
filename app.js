@@ -19,6 +19,7 @@ new Vue({
         previousGuesses: [],
         attemptsLeft: 5,
         wrongGuessMessage: "",
+        successMessage: "",
         isWrong: false,
         wrongGuessItems: []
     },
@@ -75,6 +76,9 @@ new Vue({
             if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
                 this.wrongGuessMessage = "";
+                if (this.correctItems.length === this.items.length) {
+                    this.successMessage = "Tebrikler! Bütün grupları bildiniz!";
+                }
             } else {
                 this.wrongGuessItems = [...this.selectedItems];
                 this.wrongGuessMessage = "Yanlış tahmin!";
@@ -86,6 +90,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
+                    this.successMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
                 }
             }
 
