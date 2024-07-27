@@ -90,15 +90,4 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft <= 0) {
                     this.attemptsLeft = 0;
-                    this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
-                    this.revealAllGroups();
-                    this.gameEnded = true;
-                }
-            }
-
-            this.selectedItems = [];
-        },
-        arraysEqual(a, b) {
-            if (a.length !== b.length) return false;
-            for (let i = 0; i < a.length; i++) {
-                if (a[i] !== b[i
+                   
