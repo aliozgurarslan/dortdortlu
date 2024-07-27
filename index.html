@@ -121,6 +121,12 @@
             font-size: 14px;
             color: red;
         }
+
+        .success-message {
+            margin-top: 10px;
+            font-size: 16px;
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -144,6 +150,7 @@
             <button @click="shuffleItems">Karıştır</button>
         </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
+        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
