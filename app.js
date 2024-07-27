@@ -20,7 +20,8 @@ new Vue({
         attemptsLeft: 5,
         wrongGuessMessage: "",
         isWrong: false,
-        wrongGuessItems: []
+        wrongGuessItems: [],
+        gameEnded: false
     },
     created() {
         this.shuffleItems();
@@ -45,6 +46,9 @@ new Vue({
     },
     methods: {
         toggleSelection(item) {
+            if (this.selectedItems.includes(item) || this.gameEnded) {
+                return;
+            }
             if (this.selectedItems.includes(item)) {
                 this.selectedItems = this.selectedItems.filter(i => i !== item);
             } else {
@@ -84,9 +88,11 @@ new Vue({
                     this.wrongGuessItems = [];
                 }, 3000);
                 this.attemptsLeft--;
-                if (this.attemptsLeft === 0) {
+                if (this.attemptsLeft <= 0) {
+                    this.attemptsLeft = 0;
                     this.wrongGuessMessage = 'Tüm denemeler bitti. Oyun bitti!';
                     this.revealAllGroups();
+                    this.gameEnded = true;
                 }
             }
 
@@ -104,7 +110,11 @@ new Vue({
         },
         revealAllGroups() {
             this.correctGroups.forEach(group => {
-                this.correctItems.push(...group);
+                group.forEach(item => {
+                    if (!this.correctItems.includes(item)) {
+                        this.correctItems.push(item);
+                    }
+                });
             });
         }
     }
