@@ -78,7 +78,7 @@
         }
 
         .grid-item.selected {
-            background-color: #2c514c;
+            background-color: #555D66;
         }
 
         .grid-item.correct {
@@ -106,6 +106,11 @@
             transition: background-color 0.3s;
         }
 
+        button:disabled {
+            background-color: #A3A7AC;
+            cursor: not-allowed;
+        }
+
         button:hover {
             background-color: #555D66;
         }
@@ -119,7 +124,7 @@
         .message {
             margin-top: 10px;
             font-size: 14px;
-            color: red;
+            color: #A24242;
         }
 
         .success-message {
@@ -131,7 +136,7 @@
         .game-over-message {
             margin-top: 10px;
             font-size: 16px;
-            color: red;
+            color: #A24242;
             font-weight: bold;
         }
 
@@ -144,11 +149,43 @@
             margin-top: 10px;
             font-size: 12px;
         }
+
+        .cookie-consent {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .cookie-consent button {
+            background-color: #778290;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+
+        .cookie-consent button:hover {
+            background-color: #555D66;
+        }
     </style>
 </head>
 <body>
     <div id="app" class="container">
-        <h1 style="font-size: 24px;">Dört adet dörtlü grup oluştur!</h1>
+        <h1 style="font-size: 18px;">Dört adet dörtlü grup oluştur!</h1>
         <div class="correct-groups-container">
             <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
                 <div>{{ group.items.join(', ') }}</div>
@@ -164,12 +201,16 @@
         <div style="display: flex; justify-content: center;">
             <button @click="deselectAll">Temizle</button>
             <button @click="shuffleItems">Karıştır</button>
-            <button @click="checkResults">Gönder</button>
+            <button :disabled="selectedItems.length !== 4" @click="checkResults">Gönder</button>
         </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
         <div v-if="gameOverMessage" class="game-over-message">{{ gameOverMessage }}</div>
         <div class="wall-number">Duvar #2 - 28/07/2024</div>
+        <div v-if="showCookieConsent" class="cookie-consent">
+            Bu oyun seansınızı hatırlamak için çerez kullanmaktadır.
+            <button @click="acceptCookies">Kabul et</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
