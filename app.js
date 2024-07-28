@@ -18,6 +18,7 @@ new Vue({
         correctItems: [],
         selectedItems: [],
         previousGuesses: [],
+        guessedGroups: [],
         attemptsLeft: 4,
         wrongGuessMessage: "",
         nearMissMessage: "",
@@ -41,17 +42,10 @@ new Vue({
             return this.shuffledItems.filter(item => !this.correctItems.includes(item));
         },
         correctGroupsWithMessages() {
-            let groupsWithMessages = [];
-            for (let i = 0; i < this.correctGroups.length; i++) {
-                let groupItems = this.correctGroups[i];
-                if (groupItems.every(item => this.correctItems.includes(item))) {
-                    groupsWithMessages.push({
-                        items: groupItems,
-                        message: this.correctGroupMessages[i]
-                    });
-                }
-            }
-            return groupsWithMessages;
+            return this.guessedGroups.map(index => ({
+                items: this.correctGroups[index],
+                message: this.correctGroupMessages[index]
+            }));
         }
     },
     methods: {
@@ -79,12 +73,13 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let isCorrect = this.correctGroups.some(group => {
+            let correctGroupIndex = this.correctGroups.findIndex(group => {
                 return this.arraysEqual(group.sort(), this.selectedItems.sort());
             });
 
-            if (isCorrect) {
+            if (correctGroupIndex !== -1) {
                 this.correctItems.push(...this.selectedItems);
+                this.guessedGroups.push(correctGroupIndex);
                 this.wrongGuessMessage = "";
                 this.nearMissMessage = "";
                 if (this.correctItems.length === this.items.length) {
@@ -154,7 +149,8 @@ new Vue({
                 nearMissMessage: this.nearMissMessage,
                 successMessage: this.successMessage,
                 gameOverMessage: this.gameOverMessage,
-                shuffledItems: this.shuffledItems
+                shuffledItems: this.shuffledItems,
+                guessedGroups: this.guessedGroups
             }));
         },
         checkIfPlayedToday() {
@@ -170,6 +166,7 @@ new Vue({
                 this.successMessage = gameState.successMessage;
                 this.gameOverMessage = gameState.gameOverMessage;
                 this.shuffledItems = gameState.shuffledItems || this.items;
+                this.guessedGroups = gameState.guessedGroups || [];
             } else {
                 this.shuffleItems();
             }
