@@ -28,7 +28,8 @@ new Vue({
     },
     created() {
         if (this.getCookie("played")) {
-            this.gameOverMessage = "Bu oyunu zaten oynadınız. Yeniden oynamak için sayfayı güncelleyin.";
+            this.revealAllGroups();
+            this.gameOverMessage = '';
         } else {
             this.shuffleItems();
         }
@@ -97,7 +98,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
+                    this.gameOverMessage = 'Bugün duvar galip geldi! Yeni bir duvar için yarın tekrar ziyaret edin.';
                     this.setCookie("played", "true", 1);
                 }
             }
@@ -122,29 +123,28 @@ new Vue({
                 let groupItems = this.correctGroups[i];
                 if (!groupItems.every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...groupItems);
+                    this.guessedGroups.push(i);
                 }
             }
         },
         setCookie(name, value, days) {
-            const d = new Date();
-            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-            const expires = "expires=" + d.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
         },
         getCookie(name) {
-            const cname = name + "=";
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(cname) === 0) {
-                    return c.substring(cname.length, c.length);
-                }
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
             }
-            return "";
+            return null;
         }
     }
 });
