@@ -25,6 +25,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             width: 100%;
+            margin: 0 auto; /* Center the container */
+            overflow: hidden; /* Prevent overflow */
         }
 
         .grid {
@@ -121,6 +123,19 @@
             .grid, .correct-group {
                 grid-template-columns: repeat(4, 1fr);
             }
+
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .grid-item {
+                font-size: calc(8px + 1vw); /* Adjust font size for smaller screens */
+            }
         }
 
         .message {
@@ -167,7 +182,8 @@
             align-items: center;
             font-size: 12px; /* Smaller font size */
             max-width: 400px;
-            width: 100%;
+            width: calc(100% - 20px); /* Ensure it fits within the viewport */
+            box-sizing: border-box;
         }
 
         .cookie-consent button {
