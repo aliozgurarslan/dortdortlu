@@ -18,12 +18,13 @@ new Vue({
         guessedGroups: [], // To keep track of guessed groups in order
         selectedItems: [],
         previousGuesses: [],
-        attemptsLeft: 5,
+        attemptsLeft: 4,
         wrongGuessMessage: "",
         successMessage: "",
         gameOverMessage: "", // Separate game over message
         isWrong: false,
-        wrongGuessItems: []
+        wrongGuessItems: [],
+        currentDate: new Date().toLocaleDateString() // Get current date
     },
     created() {
         this.shuffleItems();
