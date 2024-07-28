@@ -2,6 +2,7 @@ new Vue({
     el: '#app',
     data: {
         items: ["KARA", "HASAN", "GALİP", "ENİŞTE", "BAŞ", "ALT", "ÜST", "ARA", "GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR", "KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"],
+        shuffledItems: [],
         correctGroups: [
             ["KARA", "HASAN", "GALİP", "ENİŞTE"],
             ["BAŞ", "ALT", "ÜST", "ARA"],
@@ -19,6 +20,7 @@ new Vue({
         previousGuesses: [],
         attemptsLeft: 4,
         wrongGuessMessage: "",
+        nearMissMessage: "",
         successMessage: "",
         gameOverMessage: "",
         isWrong: false,
@@ -26,15 +28,17 @@ new Vue({
         showCookieConsent: true
     },
     created() {
-        this.shuffleItems();
         this.checkIfPlayedToday();
+        if (this.shuffledItems.length === 0) {
+            this.shuffleItems();
+        }
         if (localStorage.getItem('cookieConsent')) {
             this.showCookieConsent = false;
         }
     },
     computed: {
         remainingItems() {
-            return this.items.filter(item => !this.correctItems.includes(item));
+            return this.shuffledItems.filter(item => !this.correctItems.includes(item));
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
@@ -82,10 +86,11 @@ new Vue({
             if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
                 this.wrongGuessMessage = "";
+                this.nearMissMessage = "";
                 if (this.correctItems.length === this.items.length) {
                     this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
-                    this.storeGameState();
                 }
+                this.storeGameState();
             } else {
                 this.wrongGuessItems = [...this.selectedItems];
                 this.wrongGuessMessage = "Yanlış tahmin!";
@@ -95,11 +100,23 @@ new Vue({
                     this.wrongGuessItems = [];
                 }, 3000);
                 this.attemptsLeft--;
+
+                // Check for near miss
+                let nearMiss = this.correctGroups.some(group => {
+                    let intersection = group.filter(item => this.selectedItems.includes(item));
+                    return intersection.length === 3;
+                });
+                if (nearMiss) {
+                    this.nearMissMessage = "Bir yaklaşık!";
+                } else {
+                    this.nearMissMessage = "";
+                }
+
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
                     this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
-                    this.storeGameState();
                 }
+                this.storeGameState();
             }
 
             this.selectedItems = [];
@@ -112,7 +129,8 @@ new Vue({
             return true;
         },
         shuffleItems() {
-            this.items = this.items.sort(() => Math.random() - 0.5);
+            this.shuffledItems = [...this.items].sort(() => Math.random() - 0.5);
+            this.storeGameState();
         },
         deselectAll() {
             this.selectedItems = [];
@@ -129,9 +147,14 @@ new Vue({
             localStorage.setItem('playedToday', true);
             localStorage.setItem('gameState', JSON.stringify({
                 correctItems: this.correctItems,
+                selectedItems: this.selectedItems,
+                previousGuesses: this.previousGuesses,
                 attemptsLeft: this.attemptsLeft,
+                wrongGuessMessage: this.wrongGuessMessage,
+                nearMissMessage: this.nearMissMessage,
                 successMessage: this.successMessage,
-                gameOverMessage: this.gameOverMessage
+                gameOverMessage: this.gameOverMessage,
+                shuffledItems: this.shuffledItems
             }));
         },
         checkIfPlayedToday() {
@@ -139,14 +162,21 @@ new Vue({
             const gameState = JSON.parse(localStorage.getItem('gameState'));
             if (playedToday && gameState) {
                 this.correctItems = gameState.correctItems;
+                this.selectedItems = gameState.selectedItems;
+                this.previousGuesses = gameState.previousGuesses;
                 this.attemptsLeft = gameState.attemptsLeft;
+                this.wrongGuessMessage = gameState.wrongGuessMessage;
+                this.nearMissMessage = gameState.nearMissMessage;
                 this.successMessage = gameState.successMessage;
                 this.gameOverMessage = gameState.gameOverMessage;
+                this.shuffledItems = gameState.shuffledItems || this.items;
+            } else {
+                this.shuffleItems();
             }
         },
         acceptCookies() {
-            localStorage.setItem('cookieConsent', true);
             this.showCookieConsent = false;
+            localStorage.setItem('cookieConsent', true);
         }
     }
 });
