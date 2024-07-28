@@ -83,7 +83,7 @@ new Vue({
                 this.correctItems.push(...this.selectedItems);
                 this.wrongGuessMessage = "";
                 if (this.correctItems.length === this.items.length) {
-                    this.successMessage = "Tebrikler! Bütün grupları bildiniz!";
+                    this.successMessage = "Tebrikler! Duvarı yendiniz!";
                     this.storeGameState();
                 }
             } else {
@@ -97,7 +97,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameOverMessage = 'Bugün duvar galip geldi! Yeni bir duvar için yarın tekrar ziyaret edin.';
+                    this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
                     this.storeGameState();
                 }
             }
