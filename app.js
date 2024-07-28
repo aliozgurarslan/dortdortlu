@@ -1,24 +1,28 @@
 new Vue({
     el: '#app',
     data: {
-        items: ["KARA", "HASAN", "GALİP", "ENİŞTE", "BAŞ", "ALT", "ÜST", "ARA", "GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR", "KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"],
+        items: [
+            "Paris", "Tokyo", "Rio de Janeiro", "Londra",
+            "Stokholm", "Tetik Parmak", "Dunning-Kruger", "Asperger",
+            "Mısır", "Plastik Ördek", "Emoji", "Güneş",
+            "Çay", "Sağlık", "Asker", "Ülkü"
+        ],
         shuffledItems: [],
         correctGroups: [
-            ["KARA", "HASAN", "GALİP", "ENİŞTE"],
-            ["BAŞ", "ALT", "ÜST", "ARA"],
-            ["GÜNEY", "KUZEY", "KANDİLLİ", "HİSAR"],
-            ["KEFİYE", "KARPUZ", "ANAHTAR", "ZEYTİN AĞACI"]
+            ["Paris", "Tokyo", "Rio de Janeiro", "Londra"],
+            ["Stokholm", "Tetik Parmak", "Dunning-Kruger", "Asperger"],
+            ["Mısır", "Plastik Ördek", "Emoji", "Güneş"],
+            ["Çay", "Sağlık", "Asker", "Ülkü"]
         ],
         correctGroupMessages: [
-            "Orhan Pamuk romanlarındaki katiller.",
-            "Türkçe ön ekler.",
-            "Boğaziçi Üniversitesi yerleşke isimleri.",
-            "Filistin direnişinin sembolleri."
+            "Son dört Olimpiyat Oyunları ev sahipleri",
+            "Sendromlar",
+            "Sarı resmedilirler",
+            "_____ Ocağı"
         ],
         correctItems: [],
         selectedItems: [],
         previousGuesses: [],
-        guessedGroups: [],
         attemptsLeft: 4,
         wrongGuessMessage: "",
         nearMissMessage: "",
@@ -42,10 +46,17 @@ new Vue({
             return this.shuffledItems.filter(item => !this.correctItems.includes(item));
         },
         correctGroupsWithMessages() {
-            return this.guessedGroups.map(index => ({
-                items: this.correctGroups[index],
-                message: this.correctGroupMessages[index]
-            }));
+            let groupsWithMessages = [];
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
+                if (groupItems.every(item => this.correctItems.includes(item))) {
+                    groupsWithMessages.push({
+                        items: groupItems,
+                        message: this.correctGroupMessages[i]
+                    });
+                }
+            }
+            return groupsWithMessages;
         }
     },
     methods: {
@@ -73,13 +84,12 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let correctGroupIndex = this.correctGroups.findIndex(group => {
+            let isCorrect = this.correctGroups.some(group => {
                 return this.arraysEqual(group.sort(), this.selectedItems.sort());
             });
 
-            if (correctGroupIndex !== -1) {
+            if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
-                this.guessedGroups.push(correctGroupIndex);
                 this.wrongGuessMessage = "";
                 this.nearMissMessage = "";
                 if (this.correctItems.length === this.items.length) {
@@ -149,8 +159,7 @@ new Vue({
                 nearMissMessage: this.nearMissMessage,
                 successMessage: this.successMessage,
                 gameOverMessage: this.gameOverMessage,
-                shuffledItems: this.shuffledItems,
-                guessedGroups: this.guessedGroups
+                shuffledItems: this.shuffledItems
             }));
         },
         checkIfPlayedToday() {
@@ -166,7 +175,6 @@ new Vue({
                 this.successMessage = gameState.successMessage;
                 this.gameOverMessage = gameState.gameOverMessage;
                 this.shuffledItems = gameState.shuffledItems || this.items;
-                this.guessedGroups = gameState.guessedGroups || [];
             } else {
                 this.shuffleItems();
             }
