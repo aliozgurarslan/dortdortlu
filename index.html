@@ -25,6 +25,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             width: 100%;
+            margin: 0 10px; /* Added margin to avoid overflow on mobile */
         }
 
         .grid {
@@ -82,7 +83,7 @@
         }
 
         .grid-item.correct {
-            background-color: #B0C4DE;
+            background-color: #76C0A5;
         }
 
         .grid-item.wrong {
@@ -126,7 +127,6 @@
             margin-top: 10px;
             font-size: 16px;
             color: green;
-            font-weight: bold;
         }
 
         .game-over-message {
@@ -135,17 +135,11 @@
             color: red;
             font-weight: bold;
         }
-
-        .wall-number {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #555;
-        }
     </style>
 </head>
 <body>
     <div id="app" class="container">
-        <h1 style="font-size: 20px;">Dört adet dörtlü grup oluştur!</h1>
+        <h1 style="font-size: 22px;">Dört adet dörtlü grup oluştur!</h1>
         <div class="correct-groups-container">
             <div v-for="(group, index) in correctGroupsWithMessages" :key="index" class="correct-group">
                 <div>{{ group.items.join(', ') }}</div>
@@ -160,13 +154,13 @@
         <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div style="display: flex; justify-content: center;">
             <button @click="deselectAll">Temizle</button>
-            <button @click="checkResults">Gönder</button>
             <button @click="shuffleItems">Karıştır</button>
+            <button @click="checkResults">Gönder</button>
         </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
         <div v-if="gameOverMessage" class="game-over-message">{{ gameOverMessage }}</div>
-        <div class="wall-number">Duvar #2 - {{ currentDate }}</div>
+        <div>Duvar #2 - {{ currentDate }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
