@@ -15,14 +15,15 @@ new Vue({
             "Filistin direnişinin sembolleri."
         ],
         correctItems: [],
+        guessedGroups: [], // To keep track of guessed groups in order
         selectedItems: [],
         previousGuesses: [],
         attemptsLeft: 5,
         wrongGuessMessage: "",
         successMessage: "",
+        gameOverMessage: "", // Separate game over message
         isWrong: false,
-        wrongGuessItems: [],
-        guessedGroups: []
+        wrongGuessItems: []
     },
     created() {
         this.shuffleItems();
@@ -34,14 +35,11 @@ new Vue({
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
             for (let i = 0; i < this.guessedGroups.length; i++) {
-                let groupIndex = this.guessedGroups[i];
-                let groupItems = this.correctGroups[groupIndex];
-                if (groupItems.every(item => this.correctItems.includes(item))) {
-                    groupsWithMessages.push({
-                        items: groupItems,
-                        message: this.correctGroupMessages[groupIndex]
-                    });
-                }
+                let index = this.guessedGroups[i];
+                groupsWithMessages.push({
+                    items: this.correctGroups[index],
+                    message: this.correctGroupMessages[index]
+                });
             }
             return groupsWithMessages;
         }
@@ -93,7 +91,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.successMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
+                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
                 }
             }
 
