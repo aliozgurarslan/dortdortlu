@@ -15,24 +15,18 @@ new Vue({
             "Filistin direnişinin sembolleri."
         ],
         correctItems: [],
-        guessedGroups: [], // To keep track of guessed groups in order
         selectedItems: [],
         previousGuesses: [],
         attemptsLeft: 4,
         wrongGuessMessage: "",
         successMessage: "",
-        gameOverMessage: "", // Separate game over message
+        gameOverMessage: "",
         isWrong: false,
-        wrongGuessItems: [],
-        currentDate: new Date().toLocaleDateString() // Get current date
+        wrongGuessItems: []
     },
     created() {
-        if (this.getCookie("played")) {
-            this.revealAllGroups();
-            this.gameOverMessage = '';
-        } else {
-            this.shuffleItems();
-        }
+        this.shuffleItems();
+        this.checkIfPlayedToday();
     },
     computed: {
         remainingItems() {
@@ -40,12 +34,14 @@ new Vue({
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
-            for (let i = 0; i < this.guessedGroups.length; i++) {
-                let index = this.guessedGroups[i];
-                groupsWithMessages.push({
-                    items: this.correctGroups[index],
-                    message: this.correctGroupMessages[index]
-                });
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
+                if (groupItems.every(item => this.correctItems.includes(item))) {
+                    groupsWithMessages.push({
+                        items: groupItems,
+                        message: this.correctGroupMessages[i]
+                    });
+                }
             }
             return groupsWithMessages;
         }
@@ -75,17 +71,16 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let groupIndex = this.correctGroups.findIndex(group => {
+            let isCorrect = this.correctGroups.some(group => {
                 return this.arraysEqual(group.sort(), this.selectedItems.sort());
             });
 
-            if (groupIndex !== -1) {
+            if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
-                this.guessedGroups.push(groupIndex);
                 this.wrongGuessMessage = "";
                 if (this.correctItems.length === this.items.length) {
                     this.successMessage = "Tebrikler! Bütün grupları bildiniz!";
-                    this.setCookie("played", "true", 1);
+                    this.storeGameState();
                 }
             } else {
                 this.wrongGuessItems = [...this.selectedItems];
@@ -98,8 +93,8 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameOverMessage = 'Bugün duvar galip geldi! Yeni bir duvar için yarın tekrar ziyaret edin.';
-                    this.setCookie("played", "true", 1);
+                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
+                    this.storeGameState();
                 }
             }
 
@@ -123,28 +118,27 @@ new Vue({
                 let groupItems = this.correctGroups[i];
                 if (!groupItems.every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...groupItems);
-                    this.guessedGroups.push(i);
                 }
             }
         },
-        setCookie(name, value, days) {
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        storeGameState() {
+            localStorage.setItem('playedToday', true);
+            localStorage.setItem('gameState', JSON.stringify({
+                correctItems: this.correctItems,
+                attemptsLeft: this.attemptsLeft,
+                successMessage: this.successMessage,
+                gameOverMessage: this.gameOverMessage
+            }));
         },
-        getCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        checkIfPlayedToday() {
+            const playedToday = localStorage.getItem('playedToday');
+            const gameState = JSON.parse(localStorage.getItem('gameState'));
+            if (playedToday && gameState) {
+                this.correctItems = gameState.correctItems;
+                this.attemptsLeft = gameState.attemptsLeft;
+                this.successMessage = gameState.successMessage;
+                this.gameOverMessage = gameState.gameOverMessage;
             }
-            return null;
         }
     }
 });
