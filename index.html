@@ -100,7 +100,7 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #729B8C;
+            background-color: #778290;
             color: white;
             margin: 10px 5px;
             transition: background-color 0.3s;
@@ -126,6 +126,14 @@
             margin-top: 10px;
             font-size: 16px;
             color: green;
+            font-weight: bold;
+        }
+
+        .game-over-message {
+            margin-top: 10px;
+            font-size: 16px;
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -143,7 +151,7 @@
                 {{ item }}
             </div>
         </div>
-        <div>Kalan deneme: {{ attemptsLeft }}</div>
+        <p>Kalan deneme: {{ attemptsLeft }}</p>
         <div style="display: flex; justify-content: center;">
             <button @click="deselectAll">Temizle</button>
             <button @click="checkResults">Gönder</button>
@@ -151,6 +159,7 @@
         </div>
         <div v-if="wrongGuessMessage" class="message">{{ wrongGuessMessage }}</div>
         <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+        <div v-if="gameOverMessage" class="game-over-message">{{ gameOverMessage }}</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
