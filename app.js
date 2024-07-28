@@ -91,7 +91,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı.';
+                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
                 }
             }
 
@@ -115,6 +115,7 @@ new Vue({
                 let groupItems = this.correctGroups[i];
                 if (!groupItems.every(item => this.correctItems.includes(item))) {
                     this.correctItems.push(...groupItems);
+                    this.guessedGroups.push(i); // Add this line to include unrevealed groups
                 }
             }
         }
