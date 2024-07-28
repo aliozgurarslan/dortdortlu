@@ -83,7 +83,7 @@ new Vue({
                 this.correctItems.push(...this.selectedItems);
                 this.wrongGuessMessage = "";
                 if (this.correctItems.length === this.items.length) {
-                    this.successMessage = "Tebrikler! Duvarı yendiniz!";
+                    this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
                     this.storeGameState();
                 }
             } else {
