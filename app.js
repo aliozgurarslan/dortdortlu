@@ -91,7 +91,7 @@ new Vue({
                 this.attemptsLeft--;
                 if (this.attemptsLeft === 0) {
                     this.revealAllGroups();
-                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı. Yeniden oynamak için sayfayı güncelleyin.';
+                    this.gameOverMessage = 'Oyun bitti! Deneme hakkınız kalmadı.';
                 }
             }
 
