@@ -84,7 +84,7 @@ new Vue({
             });
 
             if (isCorrect) {
-                this.correctItems.push(...this.selectedItems);
+                this.correctItems = [...this.correctItems, ...this.selectedItems];
                 this.wrongGuessMessage = "";
                 this.nearMissMessage = "";
                 if (this.correctItems.length === this.items.length) {
