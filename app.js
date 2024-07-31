@@ -25,8 +25,7 @@ new Vue({
         gameOverMessage: "",
         isWrong: false,
         wrongGuessItems: [],
-        showCookieConsent: true,
-        correctGuessesOrder: [] // To track the order of correct guesses
+        showCookieConsent: true
     },
     created() {
         this.checkIfPlayedToday();
@@ -43,13 +42,12 @@ new Vue({
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
-            for (let i = 0; i < this.correctGuessesOrder.length; i++) {
-                let groupIndex = this.correctGuessesOrder[i];
-                let groupItems = this.correctGroups[groupIndex];
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
                 if (groupItems.every(item => this.correctItems.includes(item))) {
                     groupsWithMessages.push({
                         items: groupItems,
-                        message: this.correctGroupMessages[groupIndex]
+                        message: this.correctGroupMessages[i]
                     });
                 }
             }
@@ -66,63 +64,63 @@ new Vue({
                 }
             }
         },
-       checkResults() {
-    if (this.selectedItems.length !== 4) {
-        this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
-        return;
-    }
+        checkResults() {
+            if (this.selectedItems.length !== 4) {
+                this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
+                return;
+            }
 
-    let currentGuess = [...this.selectedItems].sort().toString();
-    if (this.previousGuesses.includes(currentGuess)) {
-        this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
-        this.selectedItems = [];
-        return;
-    }
+            let currentGuess = [...this.selectedItems].toString();
+            if (this.previousGuesses.includes(currentGuess)) {
+                this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
+                this.selectedItems = [];
+                return;
+            }
 
-    this.previousGuesses.push(currentGuess);
+            this.previousGuesses.push(currentGuess);
 
-    let isCorrect = this.correctGroups.some(group => {
-        return this.arraysEqual(group.sort(), this.selectedItems.sort());
-    });
+            let isCorrect = this.correctGroups.some(group => {
+                return this.arraysEqual(group, this.selectedItems);
+            });
 
-    if (isCorrect) {
-        this.correctItems.push(...this.selectedItems);
-        this.wrongGuessMessage = "";
-        this.nearMissMessage = "";
-        if (this.correctItems.length === this.items.length) {
-            this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
-        }
-        this.storeGameState();
-    } else {
-        this.wrongGuessItems = [...this.selectedItems];
-        this.wrongGuessMessage = "Yanlış tahmin!";
-        this.isWrong = true;
-        setTimeout(() => {
-            this.isWrong = false;
-            this.wrongGuessItems = [];
-        }, 3000);
-        this.attemptsLeft--;
+            if (isCorrect) {
+                this.correctItems.push(...this.selectedItems);
+                this.wrongGuessMessage = "";
+                this.nearMissMessage = "";
+                if (this.correctItems.length === this.items.length) {
+                    this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
+                }
+                this.storeGameState();
+            } else {
+                this.wrongGuessItems = [...this.selectedItems];
+                this.wrongGuessMessage = "Yanlış tahmin!";
+                this.isWrong = true;
+                setTimeout(() => {
+                    this.isWrong = false;
+                    this.wrongGuessItems = [];
+                }, 3000);
+                this.attemptsLeft--;
 
-        // Check for near miss
-        let nearMiss = this.correctGroups.some(group => {
-            let intersection = group.filter(item => this.selectedItems.includes(item));
-            return intersection.length === 3;
-        });
-        if (nearMiss) {
-            this.nearMissMessage = "Bir yaklaşık!";
-        } else {
-            this.nearMissMessage = "";
-        }
+                // Check for near miss
+                let nearMiss = this.correctGroups.some(group => {
+                    let intersection = group.filter(item => this.selectedItems.includes(item));
+                    return intersection.length === 3;
+                });
+                if (nearMiss) {
+                    this.nearMissMessage = "Bir yaklaşık!";
+                } else {
+                    this.nearMissMessage = "";
+                }
 
-        if (this.attemptsLeft === 0) {
-            this.revealAllGroups();
-            this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
-        }
-        this.storeGameState();
-    }
+                if (this.attemptsLeft === 0) {
+                    this.revealAllGroups();
+                    this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
+                }
+                this.storeGameState();
+            }
 
-    this.selectedItems = [];
-},
+            this.selectedItems = [];
+        },
         arraysEqual(a, b) {
             if (a.length !== b.length) return false;
             for (let i = 0; i < a.length; i++) {
@@ -156,8 +154,7 @@ new Vue({
                 nearMissMessage: this.nearMissMessage,
                 successMessage: this.successMessage,
                 gameOverMessage: this.gameOverMessage,
-                shuffledItems: this.shuffledItems,
-                correctGuessesOrder: this.correctGuessesOrder // Save the order of correct guesses
+                shuffledItems: this.shuffledItems
             }));
         },
         checkIfPlayedToday() {
@@ -173,7 +170,6 @@ new Vue({
                 this.successMessage = gameState.successMessage;
                 this.gameOverMessage = gameState.gameOverMessage;
                 this.shuffledItems = gameState.shuffledItems || this.items;
-                this.correctGuessesOrder = gameState.correctGuessesOrder || [];
             } else {
                 this.shuffleItems();
             }
