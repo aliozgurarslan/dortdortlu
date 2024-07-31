@@ -49,11 +49,11 @@
             gap: 5px;
             margin-bottom: 10px;
             width: 100%;
-            max-width: 600px; /* Maximum width for the green rectangles */
             background-color: #729B9B;
             padding: 10px;
             border-radius: 5px;
             box-sizing: border-box;
+            max-width: 100%; /* Ensure it doesn't exceed the container */
         }
 
         .correct-group div {
@@ -120,11 +120,6 @@
             background-color: #555D66;
         }
 
-        button:disabled {
-            background-color: #A3A7AC;
-            cursor: not-allowed;
-        }
-
         @media (max-width: 600px) {
             .grid, .correct-group {
                 grid-template-columns: repeat(4, 1fr);
@@ -154,7 +149,7 @@
         .success-message {
             margin-top: 10px;
             font-size: 16px;
-            color: #729B9B; /* Same green as rectangles' background */
+            color: #729B9B; /* Matching the green rectangles */
         }
 
         .game-over-message {
@@ -206,15 +201,6 @@
             background-color: #777;
         }
     </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0ZLPEHH99V"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-0ZLPEHH99V');
-    </script>
 </head>
 <body>
     <div id="app" class="container">
@@ -230,25 +216,34 @@
                 {{ item }}
             </div>
         </div>
-        <div v-if="wrongGuessMessage || nearMissMessage || successMessage || gameOverMessage" class="message">
+        <p class="attempts-left">Kalan hak: {{ attemptsLeft }}</p>
+        <div v-if="wrongGuessMessage || nearMissMessage" class="message">
             <span>{{ wrongGuessMessage }}</span>
             <span v-if="nearMissMessage"> {{ nearMissMessage }}</span>
-            <span v-if="successMessage" class="success-message">{{ successMessage }}</span>
-            <span v-if="gameOverMessage" class="game-over-message">{{ gameOverMessage }}</span>
         </div>
-        <p class="attempts-left">Kalan hak: {{ attemptsLeft }}</p>
+        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+        <div v-if="gameOverMessage" class="game-over-message">{{ gameOverMessage }}</div>
         <div style="display: flex; justify-content: center;">
-            <button :disabled="selectedItems.length === 0" @click="deselectAll">Temizle</button>
+            <button @click="deselectAll" :disabled="selectedItems.length === 0" :style="{ backgroundColor: selectedItems.length > 0 ? '#778290' : '#A3A7AC' }">Temizle</button>
             <button @click="shuffleItems">Karıştır</button>
-            <button :disabled="selectedItems.length !== 4" @click="checkResults">Gönder</button>
+            <button :disabled="selectedItems.length !== 4" :style="{ backgroundColor: selectedItems.length === 4 ? '#778290' : '#A3A7AC' }" @click="checkResults">Gönder</button>
         </div>
-        <div class="wall-number">Duvar #4 - 30/07/2024</div>
+        <div class="wall-number">Duvar #5 - 31/07/2024</div>
         <div v-if="showCookieConsent" class="cookie-consent">
             Bu oyun seansınızı hatırlamak için çerez kullanmaktadır.
             <button @click="acceptCookies">Kabul et</button>
         </div>
     </div>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0ZLPEHH99V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0ZLPEHH99V');
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="app.js"></script>
 </body>
