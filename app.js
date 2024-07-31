@@ -66,69 +66,63 @@ new Vue({
                 }
             }
         },
-        checkResults() {
-            if (this.selectedItems.length !== 4) {
-                this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
-                return;
-            }
+       checkResults() {
+    if (this.selectedItems.length !== 4) {
+        this.wrongGuessMessage = 'Lütfen dört öğe seçin.';
+        return;
+    }
 
-            let currentGuess = [...this.selectedItems].toString();
-            if (this.previousGuesses.includes(currentGuess)) {
-                this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
-                this.selectedItems = [];
-                return;
-            }
+    let currentGuess = [...this.selectedItems].sort().toString();
+    if (this.previousGuesses.includes(currentGuess)) {
+        this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
+        this.selectedItems = [];
+        return;
+    }
 
-            this.previousGuesses.push(currentGuess);
+    this.previousGuesses.push(currentGuess);
 
-            let isCorrect = this.correctGroups.some((group, index) => {
-                if (this.arraysEqual(group, this.selectedItems)) {
-                    if (!this.correctGuessesOrder.includes(index)) {
-                        this.correctGuessesOrder.push(index);
-                    }
-                    return true;
-                }
-                return false;
-            });
+    let isCorrect = this.correctGroups.some(group => {
+        return this.arraysEqual(group.sort(), this.selectedItems.sort());
+    });
 
-            if (isCorrect) {
-                this.correctItems.push(...this.selectedItems);
-                this.wrongGuessMessage = "";
-                this.nearMissMessage = "";
-                if (this.correctItems.length === this.items.length) {
-                    this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
-                }
-                this.storeGameState();
-            } else {
-                this.wrongGuessItems = [...this.selectedItems];
-                this.wrongGuessMessage = "Yanlış tahmin!";
-                this.isWrong = true;
-                setTimeout(() => {
-                    this.isWrong = false;
-                    this.wrongGuessItems = [];
-                }, 3000);
-                this.attemptsLeft--;
+    if (isCorrect) {
+        this.correctItems.push(...this.selectedItems);
+        this.wrongGuessMessage = "";
+        this.nearMissMessage = "";
+        if (this.correctItems.length === this.items.length) {
+            this.successMessage = "Tebrikler! Duvarı yendiniz! Her gün yeni bir duvar.";
+        }
+        this.storeGameState();
+    } else {
+        this.wrongGuessItems = [...this.selectedItems];
+        this.wrongGuessMessage = "Yanlış tahmin!";
+        this.isWrong = true;
+        setTimeout(() => {
+            this.isWrong = false;
+            this.wrongGuessItems = [];
+        }, 3000);
+        this.attemptsLeft--;
 
-                // Check for near miss
-                let nearMiss = this.correctGroups.some(group => {
-                    let intersection = group.filter(item => this.selectedItems.includes(item));
-                    return intersection.length === 3;
-                });
-                if (nearMiss) {
-                    this.nearMissMessage = "Bir yaklaşık!";
-                } else {
-                    this.nearMissMessage = "";
-                }
+        // Check for near miss
+        let nearMiss = this.correctGroups.some(group => {
+            let intersection = group.filter(item => this.selectedItems.includes(item));
+            return intersection.length === 3;
+        });
+        if (nearMiss) {
+            this.nearMissMessage = "Bir yaklaşık!";
+        } else {
+            this.nearMissMessage = "";
+        }
 
-                if (this.attemptsLeft === 0) {
-                    this.revealAllGroups();
-                    this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
-                }
-                this.storeGameState();
-            }
+        if (this.attemptsLeft === 0) {
+            this.revealAllGroups();
+            this.gameOverMessage = 'Bugün duvar galip geldi! Her gün yeni bir duvar.';
+        }
+        this.storeGameState();
+    }
 
-            this.selectedItems = [];
-        },
+    this.selectedItems = [];
+},
         arraysEqual(a, b) {
             if (a.length !== b.length) return false;
             for (let i = 0; i < a.length; i++) {
