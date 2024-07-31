@@ -1,17 +1,12 @@
 new Vue({
     el: '#app',
     data: {
-        items: [
-            "1924", "1921", "1961", "1982",
-            "1960", "1971", "1980", "2016",
-            "1920", "0912", "2019", "2901",
-            "0001", "0010", "0011", "0100"
-        ],
+        items: ["1921", "1924", "1961", "1982", "1960", "1971", "1980", "2016", "1920", "912", "2019", "2901", "0001", "0010", "0011", "0100"],
         shuffledItems: [],
         correctGroups: [
             ["1921", "1924", "1961", "1982"],
             ["1960", "1971", "1980", "2016"],
-            ["1920", "0912", "2019", "2901"],
+            ["1920", "912", "2019", "2901"],
             ["0001", "0010", "0011", "0100"]
         ],
         correctGroupMessages: [
@@ -30,7 +25,6 @@ new Vue({
         gameOverMessage: "",
         isWrong: false,
         wrongGuessItems: [],
-        correctGuessOrder: [], // New property to keep track of correct guess order
         showCookieConsent: true
     },
     created() {
@@ -48,13 +42,12 @@ new Vue({
         },
         correctGroupsWithMessages() {
             let groupsWithMessages = [];
-            for (let i = 0; i < this.correctGuessOrder.length; i++) {
-                let groupIndex = this.correctGuessOrder[i];
-                let groupItems = this.correctGroups[groupIndex];
+            for (let i = 0; i < this.correctGroups.length; i++) {
+                let groupItems = this.correctGroups[i];
                 if (groupItems.every(item => this.correctItems.includes(item))) {
                     groupsWithMessages.push({
                         items: groupItems,
-                        message: this.correctGroupMessages[groupIndex]
+                        message: this.correctGroupMessages[i]
                     });
                 }
             }
@@ -77,7 +70,7 @@ new Vue({
                 return;
             }
 
-            let currentGuess = [...this.selectedItems].sort().toString();
+            let currentGuess = [...this.selectedItems].toString();
             if (this.previousGuesses.includes(currentGuess)) {
                 this.wrongGuessMessage = 'Bu tahmini zaten yaptınız.';
                 this.selectedItems = [];
@@ -86,13 +79,12 @@ new Vue({
 
             this.previousGuesses.push(currentGuess);
 
-            let correctGroupIndex = this.correctGroups.findIndex(group => {
-                return this.arraysEqual(group.sort(), this.selectedItems.sort());
+            let isCorrect = this.correctGroups.some(group => {
+                return this.arraysEqual(group, this.selectedItems);
             });
 
-            if (correctGroupIndex !== -1) {
+            if (isCorrect) {
                 this.correctItems.push(...this.selectedItems);
-                this.correctGuessOrder.push(correctGroupIndex); // Push the correct guess order
                 this.wrongGuessMessage = "";
                 this.nearMissMessage = "";
                 if (this.correctItems.length === this.items.length) {
@@ -162,8 +154,7 @@ new Vue({
                 nearMissMessage: this.nearMissMessage,
                 successMessage: this.successMessage,
                 gameOverMessage: this.gameOverMessage,
-                shuffledItems: this.shuffledItems,
-                correctGuessOrder: this.correctGuessOrder // Store correct guess order
+                shuffledItems: this.shuffledItems
             }));
         },
         checkIfPlayedToday() {
@@ -179,7 +170,6 @@ new Vue({
                 this.successMessage = gameState.successMessage;
                 this.gameOverMessage = gameState.gameOverMessage;
                 this.shuffledItems = gameState.shuffledItems || this.items;
-                this.correctGuessOrder = gameState.correctGuessOrder || []; // Retrieve correct guess order
             } else {
                 this.shuffleItems();
             }
