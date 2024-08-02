@@ -23,10 +23,10 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
             max-width: 800px;
-            margin: 0 auto; /* Center the container */
-            overflow: hidden; /* Prevent overflow */
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
         }
 
         .grid {
@@ -83,25 +83,6 @@
             background-color: #555D66;
         }
 
-        @media (max-width: 600px) {
-            .grid, .correct-group {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .container {
-                padding: 10px;
-            }
-
-            button {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
-            .grid-item {
-                font-size: calc(8px + 1vw); /* Adjust font size for smaller screens */
-            }
-        }
-
         .wall-number {
             margin-top: 10px;
             font-size: 14px;
@@ -134,10 +115,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Dynamic Script Loading for Cache Busting -->
     <script>
-    var script = document.createElement('script');
-    var date = new Date();
-    script.src = 'app.js?v=' + date.toISOString().slice(0,10).replace(/-/g, '');
-    document.head.appendChild(script); // Append to head for better loading priority
-</script>
+        var script = document.createElement('script');
+        script.src = 'app.js?v=' + new Date().toISOString().slice(0,10).replace(/-/g, '');
+        document.body.appendChild(script);
+    </script>
 </body>
 </html>
