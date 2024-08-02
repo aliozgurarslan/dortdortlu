@@ -111,7 +111,7 @@ new Vue({
             const gameState = JSON.parse(localStorage.getItem('gameState'));
             if (gameState) {
                 this.correctItems = gameState.correctItems;
-                this.selectedItems = gameState.selectedItems;
+                this.selectedItems = gameState.selectedItems,
                 this.previousGuesses = gameState.previousGuesses;
                 this.attemptsLeft = gameState.attemptsLeft;
                 this.wrongGuessMessage = gameState.wrongGuessMessage;
