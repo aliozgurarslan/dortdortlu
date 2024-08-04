@@ -119,7 +119,7 @@
             <button>Karıştır</button>
             <button>Gönder</button>
         </div>
-        <div class="wall-number">Duvar #7 - 02/08/2024</div>
+        <div class="wall-number">Duvar #8 - 03/08/2024</div>
     </div>
 
     <!-- Google Analytics -->
@@ -134,8 +134,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Dynamic Script Loading for Cache Busting -->
     <script>
+        var date = new Date();
+        var dateString = date.getFullYear().toString() + ("0" + (date.getMonth() + 1)).toString().slice(-2) + ("0" + date.getDate()).slice(-2);
         var script = document.createElement('script');
-        script.src = 'app.js?v=' + new Date().toISOString().slice(0,10).replace(/-/g, '');
+        script.src = 'app_' + dateString + '.js';
         document.body.appendChild(script);
     </script>
 </body>
