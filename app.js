@@ -1,12 +1,12 @@
 new Vue({
     el: '#app',
     data: {
-        items: ["Buldozer", "Amerikan", "Fransız", "Sanayi", "Odak", "Diyafarm", "Objektif", "ISO", "Balalayka", "Üçgen", "Tulum", "Rebap", "Balaklava", "Kulaklık", "Bot", "Polar"],
+        items: ["Buldozer", "Amerikan", "Fransız", "Sanayi", "Odak", "Diyafram", "Objektif", "ISO", "Balalayka", "Üçgen", "Tulum", "Rebab", "Balaklava", "Kulaklık", "Bot", "Polar"],
         shuffledItems: [],
         correctGroups: [
             ["Buldozer", "Amerikan", "Fransız", "Sanayi"],
-            ["Odak", "Diyafarm", "Objektif", "ISO"],
-            ["Balalayka", "Üçgen", "Tulum", "Rebap"],
+            ["Odak", "Diyafram", "Objektif", "ISO"],
+            ["Balalayka", "Üçgen", "Tulum", "Rebab"],
             ["Balaklava", "Kulaklık", "Bot", "Polar"]
         ],
         correctGroupMessages: ["Devrimler", "Fotoğrafçılık terimleri", "Sazlar", "Soğuktan korurlar"],
@@ -111,7 +111,7 @@ new Vue({
             const gameState = JSON.parse(localStorage.getItem('gameState'));
             if (gameState) {
                 this.correctItems = gameState.correctItems;
-                this.selectedItems = gameState.selectedItems,
+                this.selectedItems = gameState.selectedItems;
                 this.previousGuesses = gameState.previousGuesses;
                 this.attemptsLeft = gameState.attemptsLeft;
                 this.wrongGuessMessage = gameState.wrongGuessMessage;
