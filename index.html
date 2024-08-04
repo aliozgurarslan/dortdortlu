@@ -132,13 +132,7 @@
     </script>
     <!-- Vue.js CDN for simplicity -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <!-- Dynamic Script Loading for Cache Busting -->
-    <script>
-        var date = new Date();
-        var dateString = date.getFullYear().toString() + ("0" + (date.getMonth() + 1)).toString().slice(-2) + date.getDate().toString();
-        var script = document.createElement('script');
-        script.src = 'app_' + dateString + '.js';
-        document.body.appendChild(script);
-    </script>
+    <!-- Static Script Loading for Testing -->
+    <script src="app_20240802.js"></script>
 </body>
 </html>
